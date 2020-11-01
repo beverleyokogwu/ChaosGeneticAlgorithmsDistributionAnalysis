@@ -226,4 +226,5 @@ plt.title('Average and Min Fitness per Generation')
 plt.legend()
 
 # function to show the plot
+#test git --> 10/31/2020 11:15pm
 plt.show()
