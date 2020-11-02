@@ -144,14 +144,18 @@ def mutate(individual,probability,algorithm_object):
 
 #generate the initial population  [[[array of 100 LM values],inf], [,]...] //total = 200
 
-
+#Use variables & make code more flexible
 lm = LM(0.01, 3.8,-0.5,2)
 rdm = Gauss(0,1)
 
 map = lm
 probability = 0.01
+gen_size = 500
+default_fitness= math.inf
 
+#generate the initial population
 pop = generatePopulation(map)
+
 
 #evaluate the fitness
 evaluate_fitness(pop)
@@ -163,7 +167,7 @@ fittest = find_fittest(pop)
 gen = 0
 
 # so far within constraints
-while fittest[1]>0 and gen <500:
+while fittest[1]>0 and gen <gen_size:
     # the best is the new pop -> may/may not do this | elitism
     new_population = [fittest]
 
@@ -183,7 +187,7 @@ while fittest[1]>0 and gen <500:
         more exploration
         '''
         child = mutate(potential_child,probability,map)
-        new_population.append([child, math.inf])
+        new_population.append([child, default_fitness])
 
     #make the new-population the next pop to work with
     pop = new_population
@@ -227,4 +231,5 @@ plt.legend()
 
 # function to show the plot
 #test git --> 10/31/2020 11:15pm
+#second test --> 11/02/2020 00:03am
 plt.show()
