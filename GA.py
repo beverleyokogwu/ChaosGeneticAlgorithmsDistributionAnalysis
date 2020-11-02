@@ -153,83 +153,89 @@ probability = 0.01
 gen_size = 500
 default_fitness= math.inf
 
-#generate the initial population
-pop = generatePopulation(map)
+def EA(lm,rdm,map,gen_size,probability,default_fitness):
 
 
-#evaluate the fitness
-evaluate_fitness(pop)
+    #generate the initial population
+    pop = generatePopulation(map)
 
-#get the fittest individual
-fittest = find_fittest(pop)
 
-#this is the first (zeroth) generation
-gen = 0
-
-# so far within constraints
-while fittest[1]>0 and gen <gen_size:
-    # the best is the new pop -> may/may not do this | elitism
-    new_population = [fittest]
-
-    #add to the new population:
-    for i in range(len(pop)-1):
-        #pick 2 parents
-        p1 = get_parent(pop)
-        p2 = get_parent(pop)
-        #crossover
-        potential_child = crossover(p1,p2)
-        #mutation
-        '''
-        How can you call lm to mutate?
-        Note: initial x_0 is gone
-        Usual probablility is [0.005,0.02]
-        too high of a mutation makes it hard to converge(exploit) and
-        more exploration
-        '''
-        child = mutate(potential_child,probability,map)
-        new_population.append([child, default_fitness])
-
-    #make the new-population the next pop to work with
-    pop = new_population
-
-    #generation increases by 1
-    gen+=1
-
-    #evaluate the fitness of this population
+    #evaluate the fitness
     evaluate_fitness(pop)
 
-    #make the best
+    #get the fittest individual
     fittest = find_fittest(pop)
-    print("Generation {}: Fittest: {}".format(gen,fittest))
-print("Ran Successfully!")
+
+    #this is the first (zeroth) generation
+    gen = 0
+
+    # so far within constraints
+    while fittest[1]>0 and gen <gen_size:
+        # the best is the new pop -> may/may not do this | elitism
+        new_population = [fittest]
+
+        #add to the new population:
+        for i in range(len(pop)-1):
+            #pick 2 parents
+            p1 = get_parent(pop)
+            p2 = get_parent(pop)
+            #crossover
+            potential_child = crossover(p1,p2)
+            #mutation
+            '''
+            How can you call lm to mutate?
+            Note: initial x_0 is gone
+            Usual probablility is [0.005,0.02]
+            too high of a mutation makes it hard to converge(exploit) and
+            more exploration
+            '''
+            child = mutate(potential_child,probability,map)
+            new_population.append([child, default_fitness])
+
+        #make the new-population the next pop to work with
+        pop = new_population
+
+        #generation increases by 1
+        gen+=1
+
+        #evaluate the fitness of this population
+        evaluate_fitness(pop)
+
+        #make the best
+        fittest = find_fittest(pop)
+        print("Generation {}: Fittest: {}".format(gen,fittest))
+    print("Ran Successfully!")
 
 
-#Plot Stuff
-# average fitness points
-x1 = [x for x in range(gen+1)]
-y1 = genarrayav
-# plotting the line 1 points
-plt.plot(x1, y1, label = "average-fitness")
+    #Plot Stuff
+    # average fitness points
+    x1 = [x for x in range(gen+1)]
+    y1 = genarrayav
+    # plotting the line 1 points
+    plt.plot(x1, y1, label = "average-fitness")
 
 
 
-# min fitness points
-x2 = [x for x in range(gen+1)]
-y2 = genarraymin
-# plotting the line 2 points
-plt.plot(x2, y2, label = "min-fitness")
+    # min fitness points
+    x2 = [x for x in range(gen+1)]
+    y2 = genarraymin
+    # plotting the line 2 points
+    plt.plot(x2, y2, label = "min-fitness")
 
-# naming the x axis
-plt.xlabel('generation')
-# naming the y axis
-plt.ylabel('fitness')
-# giving a title to my graph
-plt.title('Average and Min Fitness per Generation')
+    # naming the x axis
+    plt.xlabel('generation')
+    # naming the y axis
+    plt.ylabel('fitness')
+    # giving a title to my graph
+    plt.title('Average and Min Fitness per Generation')
 
-# show a legend on the plot
-plt.legend()
+    # show a legend on the plot
+    plt.legend()
 
-# function to show the plot
-#test git --> 10/31/2020 11:15pm
-#second test --> 11/02/2020 00:03am
-plt.show()
+    # function to show the plot
+    #test git --> 10/31/2020 11:15pm
+    #second test --> 11/02/2020 00:03am
+    plt.show()
+
+# RUN THE GA
+EA(lm,rdm,map,gen_size,probability,default_fitness)
