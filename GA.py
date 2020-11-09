@@ -107,7 +107,7 @@ def evaluate_fitness(population):
     genarrayav.append(average)
     genarraymin.append(min(fitarray))
     genarraymax.append(max(fitarray))
-    print(len(genarrayav))
+    #print(len(genarrayav))
 
 
 def find_fittest(populat):
@@ -180,15 +180,15 @@ for n trails of running the GA/CGA
 #Use variables & make code more flexible
 lm = LM(0.01, 3.8,-0.5,2)
 rdm = Gauss(0,1)
-map = lm
+#map = lm
 probability = 0.01
-gen_size = 500
+gen_size = 100
 default_fitness= math.inf
 num_trails=50
 population_size=5
 individual_size=5
 
-def EA(lm,rdm,map,gen_size,probability,default_fitness):
+def EA(map,gen_size,probability,default_fitness):
 
 
     #generate the initial population
@@ -232,7 +232,7 @@ def EA(lm,rdm,map,gen_size,probability,default_fitness):
         #make the best
         fittest = find_fittest(pop)
         #print("Generation {}: Fittest: {}".format(gen,fittest))
-    print("Ran Successfully!")
+    #print("Ran Successfully!")
 
 
     '''
@@ -269,5 +269,78 @@ def EA(lm,rdm,map,gen_size,probability,default_fitness):
 
 
 
+def plots():
+    #mean and standard deviation plots
+    avgs2D_CGA=[]
+    mins2D_CGA=[]
+    avgs2D_GA=[]
+    mins2D_GA=[]
 
-EA(lm,rdm,map,gen_size,probability,default_fitness)
+
+    for _ in range(num_trails):
+
+        #reset
+        genarrayav.clear()
+        genarraymin.clear()
+        EA(lm,gen_size,probability,default_fitness)# Run the CGA
+        #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
+        avgs2D_CGA.append(genarrayav) # add the average fitness across generations
+        mins2D_CGA.append(genarraymin)# add the min fitness across generations to the 2D array
+
+    for _ in range(num_trails):
+
+        #reset
+        genarrayav.clear()
+        genarraymin.clear()
+        EA(rdm,gen_size,probability,default_fitness)# Run the CGA
+        #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
+        avgs2D_GA.append(genarrayav) # add the average fitness across generations
+        mins2D_GA.append(genarraymin)# add the min fitness across generations to the 2D array
+
+
+    #at the end, should have two 2D arrays
+    #use the np mean and std dev to compute them in an array
+    avgs2D_CGA = np.array(avgs2D_CGA)
+    mins2D_CGA = np.array(mins2D_CGA)
+    avgs2D_GA = np.array(avgs2D_GA)
+    mins2D_GA = np.array(mins2D_GA)
+
+    std_avgs_CGA = np.std(avgs2D_CGA,axis=0)
+    std_mins_CGA = np.std(mins2D_CGA,axis=0)
+    avg_avgs_CGA = np.mean(avgs2D_CGA,axis=0)
+    avg_mins_CGA = np.mean(mins2D_CGA,axis=0)
+
+
+    #GA
+    std_avgs_GA = np.std(avgs2D_GA,axis=0)
+    std_mins_GA = np.std(mins2D_GA,axis=0)
+    avg_avgs_GA = np.mean(avgs2D_GA,axis=0)
+    avg_mins_GA = np.mean(mins2D_GA,axis=0)
+    #print(len(avgs2D[0]))
+    #print(len(avg_mins))
+    #print(std_avgs)
+    #print(avg_avgs)
+    #plot for averages
+    x = [i for i in range(gen_size+1)]
+    #x2 = [i for i in range(gen_size)]
+    plt.errorbar(x, avg_avgs_CGA, std_avgs_CGA,  label = "average-fitness of averages (CGA)")
+    plt.errorbar(x, avg_mins_CGA, std_mins_CGA,  label = "average-fitness of mins (CGA)")
+    plt.errorbar(x, avg_avgs_GA, std_avgs_GA,  label = "average-fitness of averages (GA)")
+    plt.errorbar(x, avg_mins_GA, std_mins_GA,  label = "average-fitness of mins (GA)")
+
+    plt.xlabel('generation')
+    plt.ylabel('average-fitness')
+    plt.title('Average Fitness per Generation')
+    plt.legend()
+    plt.show()
+
+
+
+plots()
+
+
+
+
+
+
+#EA(lm,gen_size,probability,default_fitness)
