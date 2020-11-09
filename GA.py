@@ -53,13 +53,38 @@ def rosenbrock(array):
         sigma+=(100*((array[elem+1]-(array[elem])**2)**2)+(array[elem]-1)**2)
     return sigma
 
-def generatePopulation(obj):
-    population_size = 5
-    individual_size = 5
+def griewank(array):
+
+    #summation, sigma
+    sigma=0
+    #product, pi
+    pi=1
+    # length of the array
+    d = len(array)
+
+    for val in range(1,d):
+        sigma+=math.pow(array[val],2)
+        pi*=math.cos(float(array[val])/math.sqrt(val))
+
+    return (float(sigma)/4000)-float(pi)+1
+
+
+def rastrigin(array):
+    #summation, sigma
+    sigma=0
+    # length of the array
+    d = len(array)
+
+    for el in range(1,d):
+        sigma+=((array[el]**2)-(10*math.cos(2*math.pi*array[el])))
+
+    return (10*d)+sigma
+
+def generatePopulation(obj, pop_size, indiv_size):
     population =[]
-    for i in range(population_size):
+    for i in range(pop_size):
         values=[]
-        for i in range(individual_size):
+        for i in range(indiv_size):
             values.append(obj.shift_scale_next())
         population.append([values,math.inf])
     return population
@@ -76,12 +101,13 @@ def evaluate_fitness(population):
     for index in range(len(population)):
 
         bm_value = rosenbrock(population[index][0])
-        fitarray.append(bm_value)#should get 200 bms
+        fitarray.append(bm_value)
         population[index][1]=bm_value
-    average = sum(fitarray)/len(fitarray)
+    average = sum(fitarray)/len(fitarray)#average fitness of individuals at some generation
     genarrayav.append(average)
     genarraymin.append(min(fitarray))
     genarraymax.append(max(fitarray))
+    print(len(genarrayav))
 
 
 def find_fittest(populat):
@@ -148,48 +174,8 @@ This is a simple function/code that calculates the average and std. dev
 for n trails of running the GA/CGA
 '''
 
-def dev_and_avg(num_trails):
-    #stats_array to store the array of arrays used to calculate the average and standard deviation
-    stats_array_avgavg=[]
-    stats_array_minavg=[]
-    deviation_min=[]
-    deviation_avg=[]
-
-    # run the EA according to the number of trails
-    # and store each min and average array in stats_array
-    for _ in range(num_trails):
-        EA(lm,rdm,map,gen_size,probability,default_fitness)
-        stats_array_minavg.append(np.average(genarraymin))
-        stats_array_avgavg.append(np.average(genarrayav))
-        deviation_min.append(np.std(genarraymin))
-        deviation_avg.append(np.std(genarrayav))
-    #Note: there is already an array of avs and mins at each run
-
-    #plot against trails
-    x = [i for i in range(num_trails)]
-    y = stats_array_avgavg
-    # plotting the line 1 points
-    plt.plot(x, y, label = "average-fitness of averages")
-
-    xx = [i for i in range(num_trails)]
-    yy = stats_array_minavg
-    # plotting the line 1 points
-    plt.plot(xx, yy, label = "average-fitness of mins")
-
-    xo = [i for i in range(num_trails)]
-    yo = deviation_avg
-    plt.plot(xo, yo, label = "standard deviation of avgs")
-
-    xo1 = [i for i in range(num_trails)]
-    yo1 = deviation_min
-    plt.plot(xo1, yo1, label = "standard deviation of mins")
 
 
-    plt.xlabel('trails')
-    plt.ylabel('fitness')
-    plt.title('Average and Standard Deviation per Generation trails')
-    plt.legend()
-    plt.show()
 
 #Use variables & make code more flexible
 lm = LM(0.01, 3.8,-0.5,2)
@@ -198,13 +184,15 @@ map = lm
 probability = 0.01
 gen_size = 500
 default_fitness= math.inf
-num_trails=100
+num_trails=50
+population_size=5
+individual_size=5
 
 def EA(lm,rdm,map,gen_size,probability,default_fitness):
 
 
     #generate the initial population
-    pop = generatePopulation(map)
+    pop = generatePopulation(map, population_size, individual_size)
 
 
     #evaluate the fitness
@@ -229,13 +217,6 @@ def EA(lm,rdm,map,gen_size,probability,default_fitness):
             #crossover
             potential_child = crossover(p1,p2)
             #mutation
-            '''
-            How can you call lm to mutate?
-            Note: initial x_0 is gone
-            Usual probablility is [0.005,0.02]
-            too high of a mutation makes it hard to converge(exploit) and
-            more exploration
-            '''
             child = mutate(potential_child,probability,map)
             new_population.append([child, default_fitness])
 
@@ -250,7 +231,7 @@ def EA(lm,rdm,map,gen_size,probability,default_fitness):
 
         #make the best
         fittest = find_fittest(pop)
-        print("Generation {}: Fittest: {}".format(gen,fittest))
+        #print("Generation {}: Fittest: {}".format(gen,fittest))
     print("Ran Successfully!")
 
 
@@ -286,7 +267,7 @@ def EA(lm,rdm,map,gen_size,probability,default_fitness):
     plt.show()
     '''
 
-# RUN THE GA
-#standard deviation and Average
-dev_and_avg(num_trails)
-#EA(lm,rdm,map,gen_size,probability,default_fitness)
+
+
+
+EA(lm,rdm,map,gen_size,probability,default_fitness)
