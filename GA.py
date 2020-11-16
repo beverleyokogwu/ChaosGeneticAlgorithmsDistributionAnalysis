@@ -295,6 +295,16 @@ def plots():
     mins2D_GA=[]
 
 
+    """
+    Approach #1:
+    New trail will be one run of CGA & GA, where we start at the same initial population.
+    - gen pop
+    - make copies
+    - use one copy for the GA
+    - use one copy for the CGA
+
+
+    """
     #DEALS WITH CGA
     for i in range(num_trails):
 
@@ -306,15 +316,15 @@ def plots():
         print(genarrayav)
         print(genarraymin)
 
-        print("Running the {} instance of the CGA".format(i))
+        print("Running the {} instance of the CGA".format(i+1))
         EA(lm,gen_size,probability,default_fitness)# Run the CGA
         #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
-        print("\nGenArrayAv for CGA trail {}:".format(i))
+        print("\nGenArrayAv for CGA trail {}:".format(i+1))
         print(genarrayav)
-        av = genarrayav
-        print("GenArrayMin for CGA trail {}:".format(i))
+        av = genarrayav.copy()
+        print("GenArrayMin for CGA trail {}:".format(i+1))
         print(genarraymin)
-        mn = genarraymin
+        mn = genarraymin.copy()
 
         print("Before appending to the 2Ds, the arrays contain:\navgs2D_CGA:")
         print(avgs2D_CGA)
@@ -346,16 +356,16 @@ def plots():
         print(genarrayav)
         print(genarraymin)
 
-        print("Running the {} instance of the GA".format(j))
+        print("Running the {} instance of the GA".format(j+1))
         EA(rdm,gen_size,probability,default_fitness)# Run the GA
         #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
-        print("\nGenArrayAv for GA trail {}:".format(j))
+        print("\nGenArrayAv for GA trail {}:".format(j+1))
         print(genarrayav)
-        av = genarrayav
+        av = genarrayav.copy()
 
-        print("GenArrayMin for GA trail {}:".format(j))
+        print("GenArrayMin for GA trail {}:".format(j+1))
         print(genarraymin)
-        mn = genarraymin
+        mn = genarraymin.copy()
 
 
 
@@ -445,11 +455,20 @@ def plots():
 
     #SUBPLOTS FOR DISTRIBUTIONS
 
-    plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
+    #plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
 
-    plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
+    #plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
 
     figs,axs = plt.subplots(2,1)
+    for ax in axs.flat:
+        ax.set(xlabel='values', ylabel='frequency')
+        ax.label_outer()
+
+    axs[0,0]= plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
+    axs[1,0]= plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
+    plt.show()
+
+    '''
     n, bins, patches = axs[0,0].hist(x=CGA_mutd_values, bins=20, color='#0504aa',alpha=0.7, rwidth=0.85)
     axs[0,0].set_title('Shift-Scale Distributions for CGA')
     axs[0,0].grid(axis='y', alpha=0.75)
@@ -463,12 +482,12 @@ def plots():
     maxfreq = n.max()
     # Set a clean upper y-axis limit.
     axs[1,0].ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
+    '''
 
-    for ax in axs.flat:
-        ax.set(xlabel='values', ylabel='frequency')
-        ax.label_outer()
 
-    plt.show()
+
+
+    #plt.show()
 
     '''
     plt.xlabel('generation')
