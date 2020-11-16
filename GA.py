@@ -8,7 +8,6 @@ from numpy.random import seed
 from numpy.random import randn
 
 genarrayav=[]
-genarraymax=[]
 genarraymin=[]
 
 
@@ -106,7 +105,7 @@ def evaluate_fitness(population):
     average = sum(fitarray)/len(fitarray)#average fitness of individuals at some generation
     genarrayav.append(average)
     genarraymin.append(min(fitarray))
-    genarraymax.append(max(fitarray))
+    #genarraymax.append(max(fitarray))
     #print(len(genarrayav))
 
 
@@ -182,11 +181,11 @@ lm = LM(0.01, 3.8,-0.5,2)
 rdm = Gauss(0,1)
 #map = lm
 probability = 0.01
-gen_size = 100
+gen_size = 10
 default_fitness= math.inf
-num_trails=50
-population_size=5
-individual_size=5
+num_trails=5
+population_size=15
+individual_size=15
 
 def EA(map,gen_size,probability,default_fitness):
 
@@ -232,7 +231,7 @@ def EA(map,gen_size,probability,default_fitness):
         #make the best
         fittest = find_fittest(pop)
         #print("Generation {}: Fittest: {}".format(gen,fittest))
-    #print("Ran Successfully!")
+    print("Ran Successfully!")
 
 
     '''
@@ -273,29 +272,94 @@ def plots():
     #mean and standard deviation plots
     avgs2D_CGA=[]
     mins2D_CGA=[]
+
     avgs2D_GA=[]
     mins2D_GA=[]
 
 
-    for _ in range(num_trails):
+    for i in range(num_trails):
 
         #reset
+        print("\n\nClearing the arrays for generating the averages and mins")
         genarrayav.clear()
         genarraymin.clear()
+        print("The arrays are now: ")
+        print(genarrayav)
+        print(genarraymin)
+
+        print("Running the {} instance of the CGA".format(i))
         EA(lm,gen_size,probability,default_fitness)# Run the CGA
         #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
-        avgs2D_CGA.append(genarrayav) # add the average fitness across generations
-        mins2D_CGA.append(genarraymin)# add the min fitness across generations to the 2D array
+        print("\nGenArrayAv for CGA trail {}:".format(i))
+        print(genarrayav)
+        av = genarrayav
+        print("GenArrayMin for CGA trail {}:".format(i))
+        print(genarraymin)
+        mn = genarraymin
 
-    for _ in range(num_trails):
+        print("Before appending to the 2Ds, the arrays contain:\navgs2D_CGA:")
+        print(avgs2D_CGA)
+        print("mins2D_CGA:")
+        print(mins2D_CGA)
+
+        print("Appending genarrayav and genarraymin to the avgs2D_GA and mins2D_GA respectively...")
+        avgs2D_CGA.append(av) # add the average fitness across generations
+        print("avgs2D_CGA now contains...")
+        print(avgs2D_CGA)
+        mins2D_CGA.append(mn)# add the min fitness across generations to the 2D array
+        print("mins2D_CGA now contains...")
+        print(mins2D_CGA)
+
+
+    for j in range(num_trails):
 
         #reset
+        print("\n\nClearing the arrays for generating the averages and mins")
         genarrayav.clear()
         genarraymin.clear()
-        EA(rdm,gen_size,probability,default_fitness)# Run the CGA
+        print("The arrays are now: ")
+        print(genarrayav)
+        print(genarraymin)
+
+        print("Running the {} instance of the GA".format(j))
+        EA(rdm,gen_size,probability,default_fitness)# Run the GA
         #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
-        avgs2D_GA.append(genarrayav) # add the average fitness across generations
-        mins2D_GA.append(genarraymin)# add the min fitness across generations to the 2D array
+        print("\nGenArrayAv for GA trail {}:".format(j))
+        print(genarrayav)
+        av = genarrayav
+
+        print("GenArrayMin for GA trail {}:".format(j))
+        print(genarraymin)
+        mn = genarraymin
+
+
+
+        print("Before appending to the 2Ds, the arrays contain:\navgs2D_GA:")
+        print(avgs2D_GA)
+        print("mins2D_GA:")
+        print(mins2D_GA)
+
+
+        print("Appending genarrayav and genarraymin to the avgs2D_GA and mins2D_GA respectively...")
+        avgs2D_GA.append(av) # add the average fitness across generations
+        print("avgs2D_GA now contains...")
+        print(avgs2D_GA)
+        mins2D_GA.append(mn)# add the min fitness across generations to the 2D array
+        print("mins2D_GA now contains...")
+        print(mins2D_GA)
+
+
+
+    #HERE! - PRINT THE ARRAYS (WITH A SMALL SET) & COMPARE THEM
+    print("\nTHE 2D ARRAYS FOR GA AND CGA: \nCGA:\nAVERAGES-")
+    print(avgs2D_CGA)
+    print("MINS-")
+    print(mins2D_CGA)
+
+    print("\nGA:\nAVERAGES-")
+    print(avgs2D_GA)
+    print("MINS-")
+    print(mins2D_GA)
 
 
     #at the end, should have two 2D arrays
@@ -304,6 +368,8 @@ def plots():
     mins2D_CGA = np.array(mins2D_CGA)
     avgs2D_GA = np.array(avgs2D_GA)
     mins2D_GA = np.array(mins2D_GA)
+
+
 
     std_avgs_CGA = np.std(avgs2D_CGA,axis=0)
     std_mins_CGA = np.std(mins2D_CGA,axis=0)
@@ -323,16 +389,38 @@ def plots():
     #plot for averages
     x = [i for i in range(gen_size+1)]
     #x2 = [i for i in range(gen_size)]
-    plt.errorbar(x, avg_avgs_CGA, std_avgs_CGA,  label = "average-fitness of averages (CGA)")
+    """
+    plt.errorbar(x, avg_avgs_CGA, std_avgs_CGA, label = "average-fitness of averages (CGA)")
     plt.errorbar(x, avg_mins_CGA, std_mins_CGA,  label = "average-fitness of mins (CGA)")
     plt.errorbar(x, avg_avgs_GA, std_avgs_GA,  label = "average-fitness of averages (GA)")
     plt.errorbar(x, avg_mins_GA, std_mins_GA,  label = "average-fitness of mins (GA)")
+    """
 
+    #SUBPLOTS
+    fig,ax = plt.subplots(2,2)
+    ax[0,0].plot(x, avg_avgs_GA)
+    ax[0,0].set_title('Average of Average Fitness per Genaration (GA)')
+    ax[0,1].plot(x, avg_mins_GA,'tab:orange')
+    ax[0,1].set_title('Average of Min Fitness per Genaration (GA)')
+    ax[1,0].plot(x, avg_avgs_CGA,'tab:green')
+    ax[1,0].set_title('Average of Average Fitness per Genaration (CGA)')
+    ax[1,1].plot(x, avg_mins_CGA,'tab:red')
+    ax[1,1].set_title('Average of Min Fitness per Genaration (CGA)')
+
+    for ax in ax.flat:
+        ax.set(xlabel='generation', ylabel='fitness')
+        ax.label_outer()
+
+
+    plt.show()
+
+    '''
     plt.xlabel('generation')
     plt.ylabel('average-fitness')
     plt.title('Average Fitness per Generation')
     plt.legend()
     plt.show()
+    '''
 
 
 
