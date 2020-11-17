@@ -296,13 +296,28 @@ def plots():
 
 
     """
+    IDEA: Statistically start from the same population
     Approach #1:
-    New trail will be one run of CGA & GA, where we start at the same initial population.
+    New trail will be one run of CGA & GA, where we start at the same initial population (still Gaussian? LM?).
+    - will change outside the EA method
     - gen pop
     - make copies
     - use one copy for the GA
     - use one copy for the CGA
+    • guarantees the performance on the same init pop
 
+    Approach #2:
+    Gen the population using Gaussian rather than LM
+    - will change within the EA method. Every trail will have a different init pop, but generated the same way.
+    • possible, but unlikely that the GA gets bad pops (pop picked when EA is ran, the pop made the GA perform poorly)
+     and the CGA gets good pops over some number of trails.
+
+    HOW to know which approach is better than the other?
+    Do either approach reduce the likelihood of one of the algorithms looking better by chance?
+    We don't want a set of results to show one better than the other because of the initial pops picked.
+    Need a fair expeiment- truth vs chance
+
+    • Multiple trails can reduce the chance
 
     """
     #DEALS WITH CGA
@@ -339,7 +354,7 @@ def plots():
         print("mins2D_CGA now contains...")
         print(mins2D_CGA)
 
-    CGA_mutd_values = mutd_values
+    CGA_mutd_values = mutd_values.copy()
     print("\n\n\nTHE SHIFT SCALE VALUES ARE:\nCGA:")
     print(CGA_mutd_values)
     print("clearing the mutd array......................................")
@@ -383,7 +398,7 @@ def plots():
         print("mins2D_GA now contains...")
         print(mins2D_GA)
 
-    GA_mutd_values = mutd_values
+    GA_mutd_values = mutd_values.copy()
 
     #HERE! - PRINT THE ARRAYS (WITH A SMALL SET) & COMPARE THEM
     print("\nTHE 2D ARRAYS FOR GA AND CGA: \nCGA:\nAVERAGES-")
@@ -455,9 +470,9 @@ def plots():
 
     #SUBPLOTS FOR DISTRIBUTIONS
 
-    #plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
+    plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
 
-    #plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
+    plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
 
     figs,axs = plt.subplots(2,1)
     for ax in axs.flat:
