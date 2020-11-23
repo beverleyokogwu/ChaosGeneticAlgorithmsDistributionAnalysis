@@ -450,13 +450,13 @@ def plots():
 
     #SUBPLOTS FOR ANG AND MIN EAs
     fig,ax = plt.subplots(2,2)
-    ax[0,0].plot(x, avg_avgs_GA)
+    ax[0,0].errorbar(x, avg_avgs_GA)
     ax[0,0].set_title('Average of Average Fitness per Genaration (GA)')
-    ax[0,1].plot(x, avg_mins_GA,'tab:orange')
+    ax[0,1].errorbar(x, avg_mins_GA,'tab:orange')
     ax[0,1].set_title('Average of Min Fitness per Genaration (GA)')
-    ax[1,0].plot(x, avg_avgs_CGA,'tab:green')
+    ax[1,0].errorbar(x, avg_avgs_CGA,'tab:green')
     ax[1,0].set_title('Average of Average Fitness per Genaration (CGA)')
-    ax[1,1].plot(x, avg_mins_CGA,'tab:red')
+    ax[1,1].errorbar(x, avg_mins_CGA,'tab:red')
     ax[1,1].set_title('Average of Min Fitness per Genaration (CGA)')
 
     for ax in ax.flat:
@@ -472,43 +472,18 @@ def plots():
 
     plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
 
-    figs,axs = plt.subplots(2,1)
+    figs,axs = plt.subplots(1,2)
+
+
+    axs[0,0]= plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
+    axs[0,1]= plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
+
     for ax in axs.flat:
         ax.set(xlabel='values', ylabel='frequency')
         ax.label_outer()
 
-    axs[0,0]= plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
-    axs[1,0]= plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
     plt.show()
 
-    '''
-    n, bins, patches = axs[0,0].hist(x=CGA_mutd_values, bins=20, color='#0504aa',alpha=0.7, rwidth=0.85)
-    axs[0,0].set_title('Shift-Scale Distributions for CGA')
-    axs[0,0].grid(axis='y', alpha=0.75)
-    maxfreq = n.max()
-    # Set a clean upper y-axis limit.
-    axs[0,0].ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
-
-    n, bins, patches = axs[1,0].hist(x=GA_mutd_values, bins=20, color='#0504aa',alpha=0.7, rwidth=0.85)
-    axs[1,0].grid(axis='y', alpha=0.75)
-    axs[1,0].set_title('Shift-Scale Distributions for GA')
-    maxfreq = n.max()
-    # Set a clean upper y-axis limit.
-    axs[1,0].ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
-    '''
-
-
-
-
-    #plt.show()
-
-    '''
-    plt.xlabel('generation')
-    plt.ylabel('average-fitness')
-    plt.title('Average Fitness per Generation')
-    plt.legend()
-    plt.show()
-    '''
 
 
 
