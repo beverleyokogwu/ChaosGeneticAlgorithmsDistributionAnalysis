@@ -363,11 +363,11 @@ def plots():
         genarraymin.clear()
 
         EA(lm,gen_size,probability,default_fitness,pop_GA)# Run the GA
-        print("\nGenArrayAv for GA trail {}:".format(j+1))
+        print("\nGenArrayAv for GA trail {}:".format(i+1))
         print(genarrayav)
         avGA = genarrayav.copy()
 
-        print("GenArrayMin for GA trail {}:".format(j+1))
+        print("GenArrayMin for GA trail {}:".format(i+1))
         print(genarraymin)
         mnGA = genarraymin.copy()
 
@@ -452,7 +452,7 @@ def plots():
     fig,ax = plt.subplots(2,2)
     ax[0,0].errorbar(x, avg_avgs_GA,yerr=std_avgs_CGA )
     ax[0,0].set_title('Average of Average Fitness per Genaration (GA)')
-    ax[0,1].errorbar(x, avg_mins_GA,,yerr=std_mins_CGA,color='orange')
+    ax[0,1].errorbar(x, avg_mins_GA,yerr=std_mins_CGA,color='orange')
     ax[0,1].set_title('Average of Min Fitness per Genaration (GA)')
     ax[1,0].errorbar(x, avg_avgs_CGA,yerr=std_avgs_GA,color='green')
     ax[1,0].set_title('Average of Average Fitness per Genaration (CGA)')
