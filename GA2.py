@@ -362,7 +362,7 @@ def plots():
         genarrayav.clear()
         genarraymin.clear()
 
-        EA(lm,gen_size,probability,default_fitness,pop_GA)# Run the GA
+        EA(rdm,gen_size,probability,default_fitness,pop_GA)# Run the GA
         print("\nGenArrayAv for GA trail {}:".format(i+1))
         print(genarrayav)
         avGA = genarrayav.copy()
