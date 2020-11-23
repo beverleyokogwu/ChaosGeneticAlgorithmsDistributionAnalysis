@@ -306,7 +306,7 @@ def plots():
     - use one copy for the CGA
     • guarantees the performance on the same init pop
 
-    Approach #2- THIS IS THE APPROACH USED IN THIS  FILE:
+    Approach #2- THIS IS THE APPROACH USED  FILE:
     Gen the population using Gaussian rather than LM
     - will change within the EA method. Every trail will have a different init pop, but generated the same way.
     • possible, but unlikely that the GA gets bad pops (pop picked when EA is ran, the pop made the GA perform poorly)
@@ -452,13 +452,13 @@ def plots():
 
     #SUBPLOTS FOR ANG AND MIN EAs
     fig,ax = plt.subplots(2,2)
-    ax[0,0].errorbar(x, avg_avgs_GA)
+    ax[0,0].errorbar(x, avg_avgs_GA,yerr=std_avgs_CGA )
     ax[0,0].set_title('Average of Average Fitness per Genaration (GA)')
-    ax[0,1].errorbar(x, avg_mins_GA,'tab:orange')
+    ax[0,1].errorbar(x, avg_mins_GA,yerr=std_mins_CGA,color='orange')
     ax[0,1].set_title('Average of Min Fitness per Genaration (GA)')
-    ax[1,0].errorbar(x, avg_avgs_CGA,'tab:green')
+    ax[1,0].errorbar(x, avg_avgs_CGA,yerr=std_avgs_GA,color='green')
     ax[1,0].set_title('Average of Average Fitness per Genaration (CGA)')
-    ax[1,1].errorbar(x, avg_mins_CGA,'tab:red')
+    ax[1,1].errorbar(x, avg_mins_CGA,yerr=std_mins_GA,color='red')
     ax[1,1].set_title('Average of Min Fitness per Genaration (CGA)')
 
     for ax in ax.flat:
