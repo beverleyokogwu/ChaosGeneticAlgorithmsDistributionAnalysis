@@ -209,7 +209,7 @@ def EA(map,gen_size,probability,default_fitness):
 
 
     #generate the initial population
-    pop = generatePopulation(map, population_size, individual_size)
+    pop = generatePopulation(rdm, population_size, individual_size)
 
 
     #evaluate the fitness
@@ -306,7 +306,7 @@ def plots():
     - use one copy for the CGA
     • guarantees the performance on the same init pop
 
-    Approach #2:
+    Approach #2- THIS IS THE APPROACH USED IN THIS  FILE:
     Gen the population using Gaussian rather than LM
     - will change within the EA method. Every trail will have a different init pop, but generated the same way.
     • possible, but unlikely that the GA gets bad pops (pop picked when EA is ran, the pop made the GA perform poorly)
