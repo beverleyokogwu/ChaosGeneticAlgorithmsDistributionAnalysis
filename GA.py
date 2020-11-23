@@ -199,11 +199,11 @@ lm = LM(0.01, 3.8,-0.5,2)
 rdm = Gauss(0,1)
 #map = lm
 probability = 0.01
-gen_size = 10
+gen_size = 500
 default_fitness= math.inf
-num_trails=5
-population_size=15
-individual_size=15
+num_trails=50
+population_size=200
+individual_size=100
 
 def EA(map,gen_size,probability,default_fitness):
 
