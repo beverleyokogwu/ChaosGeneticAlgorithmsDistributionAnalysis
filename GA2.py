@@ -178,13 +178,13 @@ def mutate(individual,probability,algorithm_object):
             n_val=algorithm_object.shift_scale_next()
 
             if algorithm_object == lm:
-                print("\nAdding {} to the CGA mutated array....".format(n_val))
+                #print("\nAdding {} to the CGA mutated array....".format(n_val))
                 mutd_values_CGA.append(n_val)
-                print("mutd_array_CGA now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values_CGA), mutd_values_CGA[0], mutd_values_CGA[-1]))
+                #print("mutd_array_CGA now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values_CGA), mutd_values_CGA[0], mutd_values_CGA[-1]))
             elif algorithm_object == rdm:
-                print("\nAdding {} to the GA mutated array....".format(n_val))
+                #print("\nAdding {} to the GA mutated array....".format(n_val))
                 mutd_values_GA.append(n_val)
-                print("mutd_array_GA now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values_GA), mutd_values_GA[0], mutd_values_GA[-1]))
+                #print("mutd_array_GA now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values_GA), mutd_values_GA[0], mutd_values_GA[-1]))
             individual[gene]+=n_val
 
     return individual
@@ -335,14 +335,14 @@ def plots():
     for i in range(num_trails):
 
         #reset
-        print("\n\nClearing the arrays for generating the averages and mins")
+        #print("\n\nClearing the arrays for generating the averages and mins")
         genarrayav.clear()
         genarraymin.clear()
-        print("The arrays are now: ")
-        print(genarrayav)
-        print(genarraymin)
+        #print("The arrays are now: ")
+        #print(genarrayav)
+        #print(genarraymin)
 
-        print("Running the {} instance of the CGA & GA".format(i+1))
+        #print("Running the {} instance of the CGA & GA".format(i+1))
         #generate the initial population
         pop = generatePopulation(rdm, population_size, individual_size)
 
@@ -352,23 +352,23 @@ def plots():
 
         EA(lm,gen_size,probability,default_fitness,pop_CGA)# Run the CGA
         #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
-        print("\nGenArrayAv for CGA trail {}:".format(i+1))
-        print(genarrayav)
+        #print("\nGenArrayAv for CGA trail {}:".format(i+1))
+        #print(genarrayav)
         av = genarrayav.copy()
-        print("GenArrayMin for CGA trail {}:".format(i+1))
-        print(genarraymin)
+        #print("GenArrayMin for CGA trail {}:".format(i+1))
+        #print(genarraymin)
         mn = genarraymin.copy()
 
         genarrayav.clear()
         genarraymin.clear()
 
         EA(rdm,gen_size,probability,default_fitness,pop_GA)# Run the GA
-        print("\nGenArrayAv for GA trail {}:".format(i+1))
-        print(genarrayav)
+        #print("\nGenArrayAv for GA trail {}:".format(i+1))
+        #print(genarrayav)
         avGA = genarrayav.copy()
 
-        print("GenArrayMin for GA trail {}:".format(i+1))
-        print(genarraymin)
+        #print("GenArrayMin for GA trail {}:".format(i+1))
+        #print(genarraymin)
         mnGA = genarraymin.copy()
 
         #print("Before appending to the 2Ds, the arrays contain:\navgs2D_CGA:")
@@ -376,22 +376,22 @@ def plots():
         #print("mins2D_CGA:")
         #print(mins2D_CGA)
 
-        print("Appending genarrayav and genarraymin to the avgs2D_CGA and mins2D_CGA respectively...")
+        #print("Appending genarrayav and genarraymin to the avgs2D_CGA and mins2D_CGA respectively...")
         avgs2D_CGA.append(av) # add the average fitness across generations
-        print("avgs2D_CGA now contains...")
-        print(avgs2D_CGA)
+        #print("avgs2D_CGA now contains...")
+        #print(avgs2D_CGA)
         mins2D_CGA.append(mn)# add the min fitness across generations to the 2D array
-        print("mins2D_CGA now contains...")
-        print(mins2D_CGA)
+        #print("mins2D_CGA now contains...")
+        #print(mins2D_CGA)
 
         #Append for GA:
-        print("Appending genarrayav and genarraymin to the avgs2D_GA and mins2D_GA respectively...")
+        #print("Appending genarrayav and genarraymin to the avgs2D_GA and mins2D_GA respectively...")
         avgs2D_GA.append(avGA) # add the average fitness across generations
-        print("avgs2D_GA now contains...")
-        print(avgs2D_GA)
+        #print("avgs2D_GA now contains...")
+        #print(avgs2D_GA)
         mins2D_GA.append(mnGA)# add the min fitness across generations to the 2D array
-        print("mins2D_GA now contains...")
-        print(mins2D_GA)
+        #print("mins2D_GA now contains...")
+        #print(mins2D_GA)
 
 
     CGA_mutd_values = mutd_values_CGA.copy()
