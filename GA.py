@@ -175,9 +175,9 @@ def mutate(individual,probability,algorithm_object):
         num = random.uniform(0.0,1.0)
         if num < probability:
             n_val=algorithm_object.shift_scale_next()
-            print("\nAdding {} to the mutated array....".format(n_val))
+            #print("\nAdding {} to the mutated array....".format(n_val))
             mutd_values.append(n_val)
-            print("mutd_array now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values), mutd_values[0], mutd_values[-1]))
+            #print("mutd_array now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values), mutd_values[0], mutd_values[-1]))
             individual[gene]+=n_val
 
     return individual
@@ -324,79 +324,79 @@ def plots():
     for i in range(num_trails):
 
         #reset
-        print("\n\nClearing the arrays for generating the averages and mins")
+        #print("\n\nClearing the arrays for generating the averages and mins")
         genarrayav.clear()
         genarraymin.clear()
-        print("The arrays are now: ")
-        print(genarrayav)
-        print(genarraymin)
+        #print("The arrays are now: ")
+        #print(genarrayav)
+        #print(genarraymin)
 
-        print("Running the {} instance of the CGA".format(i+1))
+        #print("Running the {} instance of the CGA".format(i+1))
         EA(lm,gen_size,probability,default_fitness)# Run the CGA
         #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
-        print("\nGenArrayAv for CGA trail {}:".format(i+1))
-        print(genarrayav)
+        #print("\nGenArrayAv for CGA trail {}:".format(i+1))
+        #print(genarrayav)
         av = genarrayav.copy()
-        print("GenArrayMin for CGA trail {}:".format(i+1))
-        print(genarraymin)
+        #print("GenArrayMin for CGA trail {}:".format(i+1))
+        #print(genarraymin)
         mn = genarraymin.copy()
 
-        print("Before appending to the 2Ds, the arrays contain:\navgs2D_CGA:")
-        print(avgs2D_CGA)
-        print("mins2D_CGA:")
-        print(mins2D_CGA)
+        #print("Before appending to the 2Ds, the arrays contain:\navgs2D_CGA:")
+        #print(avgs2D_CGA)
+        #print("mins2D_CGA:")
+        #print(mins2D_CGA)
 
-        print("Appending genarrayav and genarraymin to the avgs2D_GA and mins2D_GA respectively...")
+        #print("Appending genarrayav and genarraymin to the avgs2D_GA and mins2D_GA respectively...")
         avgs2D_CGA.append(av) # add the average fitness across generations
-        print("avgs2D_CGA now contains...")
-        print(avgs2D_CGA)
+        #print("avgs2D_CGA now contains...")
+        #print(avgs2D_CGA)
         mins2D_CGA.append(mn)# add the min fitness across generations to the 2D array
-        print("mins2D_CGA now contains...")
-        print(mins2D_CGA)
+        #print("mins2D_CGA now contains...")
+        #print(mins2D_CGA)
 
     CGA_mutd_values = mutd_values.copy()
-    print("\n\n\nTHE SHIFT SCALE VALUES ARE:\nCGA:")
-    print(CGA_mutd_values)
-    print("clearing the mutd array......................................")
+    #print("\n\n\nTHE SHIFT SCALE VALUES ARE:\nCGA:")
+    #print(CGA_mutd_values)
+    #print("clearing the mutd array......................................")
     mutd_values.clear()
 
     #DEALS WITH GA
     for j in range(num_trails):
 
         #reset
-        print("\n\nClearing the arrays for generating the averages and mins")
+        #print("\n\nClearing the arrays for generating the averages and mins")
         genarrayav.clear()
         genarraymin.clear()
-        print("The arrays are now: ")
-        print(genarrayav)
-        print(genarraymin)
+        #print("The arrays are now: ")
+        #print(genarrayav)
+        #print(genarraymin)
 
-        print("Running the {} instance of the GA".format(j+1))
+        #print("Running the {} instance of the GA".format(j+1))
         EA(rdm,gen_size,probability,default_fitness)# Run the GA
         #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
-        print("\nGenArrayAv for GA trail {}:".format(j+1))
-        print(genarrayav)
+        #print("\nGenArrayAv for GA trail {}:".format(j+1))
+        #print(genarrayav)
         av = genarrayav.copy()
 
-        print("GenArrayMin for GA trail {}:".format(j+1))
-        print(genarraymin)
+        #print("GenArrayMin for GA trail {}:".format(j+1))
+        #print(genarraymin)
         mn = genarraymin.copy()
 
 
 
-        print("Before appending to the 2Ds, the arrays contain:\navgs2D_GA:")
-        print(avgs2D_GA)
-        print("mins2D_GA:")
-        print(mins2D_GA)
+        #print("Before appending to the 2Ds, the arrays contain:\navgs2D_GA:")
+        #print(avgs2D_GA)
+        #print("mins2D_GA:")
+        #print(mins2D_GA)
 
 
-        print("Appending genarrayav and genarraymin to the avgs2D_GA and mins2D_GA respectively...")
+        #print("Appending genarrayav and genarraymin to the avgs2D_GA and mins2D_GA respectively...")
         avgs2D_GA.append(av) # add the average fitness across generations
-        print("avgs2D_GA now contains...")
-        print(avgs2D_GA)
+        #print("avgs2D_GA now contains...")
+        #print(avgs2D_GA)
         mins2D_GA.append(mn)# add the min fitness across generations to the 2D array
-        print("mins2D_GA now contains...")
-        print(mins2D_GA)
+        #print("mins2D_GA now contains...")
+        #print(mins2D_GA)
 
     GA_mutd_values = mutd_values.copy()
 
