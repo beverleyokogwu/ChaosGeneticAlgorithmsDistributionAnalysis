@@ -2,6 +2,7 @@ import math
 import random
 import matplotlib.pyplot as plt
 import numpy as np
+import copy
 
 # generate random Gaussian values
 from numpy.random import seed
@@ -117,6 +118,8 @@ def evaluate_fitness(population):
 
         bm_value = rosenbrock(population[index][0])
         fitarray.append(bm_value)
+
+        # changes the fitness value
         population[index][1]=bm_value
     average = sum(fitarray)/len(fitarray)#average fitness of individuals at some generation
     genarrayav.append(average)
@@ -206,21 +209,13 @@ lm = LM(0.01, 3.8,-0.5,2)
 rdm = Gauss(0,1)
 #map = lm
 probability = 0.01
-gen_size = 500
+gen_size = 10
 default_fitness= math.inf
-num_trails=50
-population_size=200
-individual_size=100
+num_trails=5
+population_size=10
+individual_size=5
 
 def EA(map,gen_size,probability,default_fitness,pop):
-
-
-    #generate the initial population
-    #pop = generatePopulation(rdm, population_size, individual_size)
-
-    #make copies--> adjustment for approach#1
-    #pop_GA = pop.copy()
-    #pop_CGA = pop.copy()
 
 
     #evaluate the fitness
@@ -346,9 +341,9 @@ def plots():
         #generate the initial population
         pop = generatePopulation(rdm, population_size, individual_size)
 
-        #make copies--> adjustment for approach#1
-        pop_GA = pop.copy()
-        pop_CGA = pop.copy()
+        #make copies--> adjustment for approach#1. the arrays are independent of each other.
+        pop_GA = copy.deepcopy(pop)
+        pop_CGA = copy.deepcopy(pop)
 
         EA(lm,gen_size,probability,default_fitness,pop_CGA)# Run the CGA
         #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
@@ -448,22 +443,24 @@ def plots():
     plt.errorbar(x, avg_mins_GA, std_mins_GA,  label = "average-fitness of mins (GA)")
     """
 
-    #SUBPLOTS FOR ANG AND MIN EAs
-    fig,ax = plt.subplots(2,2)
-    ax[0,0].errorbar(x, avg_avgs_GA,yerr=std_avgs_CGA )
-    ax[0,0].set_title('Average of Average Fitness per Genaration (GA)')
-    ax[0,1].errorbar(x, avg_mins_GA,yerr=std_mins_CGA,color='orange')
-    ax[0,1].set_title('Average of Min Fitness per Genaration (GA)')
-    ax[1,0].errorbar(x, avg_avgs_CGA,yerr=std_avgs_GA,color='green')
-    ax[1,0].set_title('Average of Average Fitness per Genaration (CGA)')
-    ax[1,1].errorbar(x, avg_mins_CGA,yerr=std_mins_GA,color='red')
-    ax[1,1].set_title('Average of Min Fitness per Genaration (CGA)')
+    #SUBPLOTS FOR ANG-AVG EAs
+    fig,ax = plt.subplots(2,1)
+    ax[0].errorbar(x, avg_avgs_GA,yerr=std_avgs_CGA )
+    ax[0].set_title('Average of Average Fitness per Genaration (GA)')
 
-    for ax in ax.flat:
-        ax.set(xlabel='generation', ylabel='fitness')
-        ax.label_outer()
+    ax[1].errorbar(x, avg_avgs_CGA,yerr=std_avgs_GA,color='green')
+    ax[1].set_title('Average of Average Fitness per Genaration (CGA)')
 
 
+    plt.show()
+
+    #SUBPLOTS FOR ANG-MIN EAs
+    fig,ax = plt.subplots(2,1)
+    ax[0].errorbar(x, avg_mins_GA,yerr=std_mins_CGA,color='orange')
+    ax[0].set_title('Average of Min Fitness per Genaration (GA)')
+
+    ax[1].errorbar(x, avg_mins_CGA,yerr=std_mins_GA,color='red')
+    ax[1].set_title('Average of Min Fitness per Genaration (CGA)')
     plt.show()
 
     #SUBPLOTS FOR DISTRIBUTIONS
