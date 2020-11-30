@@ -205,15 +205,15 @@ for n trails of running the GA/CGA
 
 
 #Use variables & make code more flexible
-lm = LM(0.01, 3.8,-0.5,2)
+lm = LM(0.02, 4,-0.5,2)
 rdm = Gauss(0,1)
 #map = lm
 probability = 0.01
-gen_size = 10
+gen_size = 500
 default_fitness= math.inf
-num_trails=5
-population_size=10
-individual_size=5
+num_trails=50
+population_size=200
+individual_size=100
 
 def EA(map,gen_size,probability,default_fitness,pop):
 
@@ -469,15 +469,12 @@ def plots():
 
     plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
 
-    figs,axs = plt.subplots(1,2)
+    figs,axs = plt.subplots(2,1)
 
 
-    axs[0,0]= plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
-    axs[0,1]= plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
+    axs[0]= plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
+    axs[1]= plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
 
-    for ax in axs.flat:
-        ax.set(xlabel='values', ylabel='frequency')
-        ax.label_outer()
 
     plt.show()
 
