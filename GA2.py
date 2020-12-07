@@ -116,7 +116,8 @@ def evaluate_fitness(population):
 
     for index in range(len(population)):
 
-        bm_value = rosenbrock(population[index][0])
+        #bm_value = rosenbrock(population[index][0])
+        bm_value = rastrigin(population[index][0])
         fitarray.append(bm_value)
 
         # changes the fitness value
@@ -212,8 +213,8 @@ probability = 0.01
 gen_size = 500
 default_fitness= math.inf
 num_trails=50
-population_size=200
-individual_size=100
+population_size=100
+individual_size=50
 
 def EA(map,gen_size,probability,default_fitness,pop):
 
@@ -394,7 +395,9 @@ def plots():
 
 
     #HERE! - PRINT THE ARRAYS (WITH A SMALL SET) & COMPARE THEM
-    print("\nTHE 2D ARRAYS FOR GA AND CGA: \nCGA:\nAVERAGES-")
+    print("\nTHE 2D ARRAYS FOR GA AND CGA ARE DONE!!!!")
+
+    '''
     print(avgs2D_CGA)
     print("MINS-")
     print(mins2D_CGA)
@@ -408,6 +411,7 @@ def plots():
     print(CGA_mutd_values)
     print("GA:")
     print(GA_mutd_values)
+    '''
 
     #at the end, should have two 2D arrays
     #use the np mean and std dev to compute them in an array
@@ -442,6 +446,35 @@ def plots():
     plt.errorbar(x, avg_avgs_GA, std_avgs_GA,  label = "average-fitness of averages (GA)")
     plt.errorbar(x, avg_mins_GA, std_mins_GA,  label = "average-fitness of mins (GA)")
     """
+
+    #REGULAR PLOTS AVG-AVG
+    plt.plot(x, avg_avgs_CGA,  label = "average-fitness of averages (CGA)")
+    plt.plot(x, avg_avgs_GA,  label = "average-fitness of averages (GA)")
+    # naming the x axis
+    plt.xlabel('generation')
+    # naming the y axis
+    plt.ylabel('fitness')
+    # giving a title to my graph
+    plt.title('Average of Average Fitness per Generation')
+
+    # show a legend on the plot
+    plt.legend()
+    plt.show()
+
+    #REGULAR PLOTS AVG-MINS
+    plt.plot(x, avg_mins_CGA,   label = "average-fitness of mins (CGA)")
+    plt.plot(x, avg_mins_GA,  label = "average-fitness of mins (GA)")
+
+    # naming the x axis
+    plt.xlabel('generation')
+    # naming the y axis
+    plt.ylabel('fitness')
+    # giving a title to my graph
+    plt.title('Average of Min Fitness per Generation')
+
+    # show a legend on the plot
+    plt.legend()
+    plt.show()
 
     #SUBPLOTS FOR ANG-AVG EAs
     fig,ax = plt.subplots(2,1)
