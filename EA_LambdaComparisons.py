@@ -308,10 +308,10 @@ def plotMapParameters(l1,l2,l3,benchmark):
     x = [i for i in range(gen_size+1)]
 
 
-    plt.plot(x,l1_minFitness[index],color="orange",label=l1)
-    plt.plot(x,l2_minFitness[index],color="purple",label=l2)
-    plt.plot(x,l3_minFitness[index],color="green",label=l3)
-    for index in range(len(l1_minFitness)):
+    plt.plot(x,l1_minFitness[0],color="orange",label=l1)
+    plt.plot(x,l2_minFitness[0],color="purple",label=l2)
+    plt.plot(x,l3_minFitness[0],color="green",label=l3)
+    for index in range(1,len(l1_minFitness)):
         plt.plot(x,l1_minFitness[index],color="orange")
         plt.plot(x,l2_minFitness[index],color="purple")
         plt.plot(x,l3_minFitness[index],color="green")
@@ -328,6 +328,6 @@ def plotMapParameters(l1,l2,l3,benchmark):
 
 
 
-#plotMapParameters(3.8,3.9,4.0,Rastrigin)
-plotMapParameters(3.8,3.9,4.0,Rosenbrock)
+plotMapParameters(3.8,3.9,4.0,Rastrigin)
+#plotMapParameters(3.8,3.9,4.0,Rosenbrock)
 #plotMapParameters(3.8,3.9,4.0,Griewank)
