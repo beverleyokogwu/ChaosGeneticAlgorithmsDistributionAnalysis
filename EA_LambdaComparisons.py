@@ -4,6 +4,8 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
+import inspect
+import sys
 # generate random Gaussian values
 from numpy.random import seed
 from numpy.random import randn
@@ -59,7 +61,7 @@ class Gauss:
 def logisticMap(r, x_n):
     return r * x_n *(1.0-x_n)
 
-def rosenbrock(array):
+def Rosenbrock(array):
     #summation, sigma
     sigma=0
     # length of the array
@@ -69,7 +71,7 @@ def rosenbrock(array):
         sigma+=(100*((array[elem+1]-(array[elem])**2)**2)+(array[elem]-1)**2)
     return sigma
 
-def griewank(array):
+def Griewank(array):
 
     #summation, sigma
     sigma=0
@@ -85,7 +87,7 @@ def griewank(array):
     return (float(sigma)/4000)-float(pi)+1
 
 
-def rastrigin(array):
+def Rastrigin(array):
     #summation, sigma
     sigma=0
     # length of the array
@@ -117,12 +119,12 @@ def evaluate_fitness(population,benchMark):
     for index in range(len(population)):
 
 
-        if benchMark == rastrigin:
-            bm_value = rastrigin(population[index][0])
-        elif benchMark == rosenbrock:
-            bm_value = rosenbrock(population[index][0])
+        if benchMark == Rastrigin:
+            bm_value = Rastrigin(population[index][0])
+        elif benchMark == Rosenbrock:
+            bm_value = Rosenbrock(population[index][0])
         else:
-            bm_value = griewank(population[index][0])
+            bm_value = Griewank(population[index][0])
 
         fitarray.append(bm_value)
 
@@ -248,7 +250,7 @@ def EA(map,gen_size,probability,default_fitness,pop,bm):
         gen+=1
 
         #evaluate the fitness of this population
-        evaluate_fitness(pop)
+        evaluate_fitness(pop,bm)
 
         #make the best
         fittest = find_fittest(pop)
@@ -258,7 +260,7 @@ def EA(map,gen_size,probability,default_fitness,pop,bm):
 
 def plotMapParameters(l1,l2,l3,benchmark):
     #list containing proposed x0s
-    xZeros=[0.01,0.02,0.03,0.04,0.05,0.1,0.2,0.3,0.4,0.5]
+    xZeros=[0.01,0.02,0.03,0.04,0.05,0.1,0.2,0.3,0.4,0.497]
 
     #store the values to plot
     l1_minFitness =[]
@@ -279,7 +281,7 @@ def plotMapParameters(l1,l2,l3,benchmark):
         genarraymin.clear()
         lm = LM(xZeros[i], l2,-0.5,2)
         pop = generatePopulation(lm, population_size, individual_size)
-        EA(lm,gen_size,probability,default_fitness,pop)
+        EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
         l2_minFitness.append(mn)
 
@@ -287,7 +289,7 @@ def plotMapParameters(l1,l2,l3,benchmark):
         genarraymin.clear()
         lm = LM(xZeros[i], l3,-0.5,2)
         pop = generatePopulation(lm, population_size, individual_size)
-        EA(lm,gen_size,probability,default_fitness,pop)
+        EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
         l3_minFitness.append(mn)
 
@@ -297,18 +299,26 @@ def plotMapParameters(l1,l2,l3,benchmark):
     l2_minFitness = np.array(l2_minFitness)
     l3_minFitness = np.array(l3_minFitness)
 
+    """
+    for index in range(len(l1_minFitness)):
+        print(index)
+        print(l3_minFitness[index])
+    """
     #Let's plot
     x = [i for i in range(gen_size+1)]
 
 
+    plt.plot(x,l1_minFitness[index],color="orange",label=l1)
+    plt.plot(x,l2_minFitness[index],color="purple",label=l2)
+    plt.plot(x,l3_minFitness[index],color="green",label=l3)
     for index in range(len(l1_minFitness)):
-        plt.plot(x,l1_minFitness[index],color="red")
-        plt.plot(x,l2_minFitness[index],color="blue")
+        plt.plot(x,l1_minFitness[index],color="orange")
+        plt.plot(x,l2_minFitness[index],color="purple")
         plt.plot(x,l3_minFitness[index],color="green")
 
     plt.xlabel('generation')
     plt.ylabel('fitness')
-    plt.title('Logistic Map on {} Fitness Function'.format(benchmark))
+    plt.title('Logistic Map on {} Fitness Function'.format(benchmark.__name__))
 
     # show a legend on the plot
     plt.legend()
@@ -318,4 +328,6 @@ def plotMapParameters(l1,l2,l3,benchmark):
 
 
 
-plotMapParameters(3.8,3.9,4.0,rastrigin)
+#plotMapParameters(3.8,3.9,4.0,Rastrigin)
+plotMapParameters(3.8,3.9,4.0,Rosenbrock)
+#plotMapParameters(3.8,3.9,4.0,Griewank)
