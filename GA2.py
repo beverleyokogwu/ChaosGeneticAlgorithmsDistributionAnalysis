@@ -213,8 +213,8 @@ probability = 0.01
 gen_size = 500
 default_fitness= math.inf
 num_trails=50
-population_size=100
-individual_size=50
+population_size=200
+individual_size=100
 
 def EA(map,gen_size,probability,default_fitness,pop):
 
@@ -477,23 +477,22 @@ def plots():
     plt.show()
 
     #SUBPLOTS FOR ANG-AVG EAs
-    fig,ax = plt.subplots(2,1)
-    ax[0].errorbar(x, avg_avgs_GA,yerr=std_avgs_CGA )
-    ax[0].set_title('Average of Average Fitness per Genaration (GA)')
+    fig,ax = plt.subplots(2,2)
+    ax[0,0].errorbar(x, avg_avgs_GA,yerr=std_avgs_CGA )
+    ax[0,0].set_title('Average of Average Fitness per Genaration (GA)')
+    ax[0,0].grid('on')
 
-    ax[1].errorbar(x, avg_avgs_CGA,yerr=std_avgs_GA,color='green')
-    ax[1].set_title('Average of Average Fitness per Genaration (CGA)')
+    ax[1,0].errorbar(x, avg_avgs_CGA,yerr=std_avgs_GA,color='green')
+    ax[1,0].set_title('Average of Average Fitness per Genaration (CGA)')
+    ax[1,0].grid('on')
 
+    ax[0,1].errorbar(x, avg_mins_GA,yerr=std_mins_CGA,color='orange')
+    ax[0,1].set_title('Average of Min Fitness per Genaration (GA)')
+    ax[0,1].grid('on')
 
-    plt.show()
-
-    #SUBPLOTS FOR ANG-MIN EAs
-    fig,ax = plt.subplots(2,1)
-    ax[0].errorbar(x, avg_mins_GA,yerr=std_mins_CGA,color='orange')
-    ax[0].set_title('Average of Min Fitness per Genaration (GA)')
-
-    ax[1].errorbar(x, avg_mins_CGA,yerr=std_mins_GA,color='red')
-    ax[1].set_title('Average of Min Fitness per Genaration (CGA)')
+    ax[1,1].errorbar(x, avg_mins_CGA,yerr=std_mins_GA,color='red')
+    ax[1,1].set_title('Average of Min Fitness per Genaration (CGA)')
+    ax[1,1].grid('on')
     plt.show()
 
     #SUBPLOTS FOR DISTRIBUTIONS
