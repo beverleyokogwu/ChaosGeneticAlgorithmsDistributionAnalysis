@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 import random
+import numpy as np
 
 result = []
 lambdas = []
@@ -12,15 +13,15 @@ xmin = 2
 xmax = 4
 mult = (xmax - xmin)*2000
 
-rvalues = arange(xmin, xmax, 0.01)
+rvalues = np.arange(xmin, xmax, 0.01)
 
 for r in rvalues:
-    x = 0.1
+    x = 0.01
     result = []
     for t in range(100):
         x = r * x * (1 - x)
-        result.append(log(abs(r - 2*r*x)))
-    lambdas.append(mean(result))
+        result.append(np.log(abs(r - 2*r*x)))
+    lambdas.append(np.mean(result))
     # ignore first 100 iterations as transient time
     # then iterate anew
     for t in range(20):
@@ -35,11 +36,13 @@ xticks = np.linspace(xmin, xmax, mult)
 # zero line
 zero = [0]*mult
 ax1.plot(xticks, zero, 'g-')
-ax1.plot(xticks, maps, 'r.',alpha = 0.3, label = 'Logistic map')
-ax1.set_xlabel('r')
+#ax1.plot(xticks, maps, 'r.',alpha = 0.3, label = 'Logistic map')
+#ax1.set_xlabel('r')
 ax1.plot(rvalues, lambdas, 'b-', linewidth = 3, label = 'Lyapunov exponent')
 ax1.grid('on')
 ax1.set_ylim(-1, 1)
 ax1.set_xlabel('r')
+ax1.set_ylabel('Lyapunov Exponent')
 ax1.legend(loc='best')
-ax1.set_title('Logistic map versus Lyapunov exponent')
+ax1.set_title('Lyapunov Exponent for the Logistic Map')
+plt.show()
