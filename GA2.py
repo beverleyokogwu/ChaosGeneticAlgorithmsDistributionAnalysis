@@ -56,6 +56,19 @@ class Gauss:
     def shift_scale_next(self):
         return (self.next_val() + self.shift) * self.scale
 
+# Cubic Map class
+class Cubic:
+    def __init__(self,x_0,r,shift,scale):
+        self.x_0 = x_0
+        self.r = r
+
+    def next_val(self):
+        self.x = (self.r * self.x *((self.x**2)-1.0))+self.x
+        return self.x
+
+    def shift_scale_next(self):
+        return (self.next_val() + self.shift) * self.scale
+
 def logisticMap(r, x_n):
     return r * x_n *(1.0-x_n)
 
@@ -210,8 +223,9 @@ for n trails of running the GA/CGA
 
 
 #Use variables & make code more flexible
-lm = LM(0.02, 4,-0.5,2)
+lm = LM(0.02, 4,0,1)
 rdm = Gauss(0,1)
+cbm = Cubic(0.02,3,0,1)
 #map = lm
 probabilitym = 0.01
 probabilityc = 0.8
