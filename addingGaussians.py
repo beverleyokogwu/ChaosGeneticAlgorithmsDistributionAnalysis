@@ -51,7 +51,7 @@ class Gauss:
         self.scale = scale
 
     def next_val(self):
-        return np.random.normal()+np.random.normal() # NO, THIS WILL STILL ADD A NUMBER
+        return np.random.normal()+np.random.normal() # NO, THIS WILL STILL ADD A NUMBER. need to have diff MEANS but same sd
 
     def shift_scale_next(self):
         return (self.next_val() + self.shift) * self.scale

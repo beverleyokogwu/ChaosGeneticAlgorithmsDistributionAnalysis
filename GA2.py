@@ -163,13 +163,17 @@ def get_parent(pop):
         #print("{} is < than {}, so return {}".format(Bfit,Afit,Bfit))
         return parentB
 
-def crossover(p1,p2):
+def crossover(p1,p2,probability):
     parentLen = len(p1)
-    crossPoint= random.randint(0,parentLen)
-    newKid1= p1[:crossPoint]
-    newKid2= p2[crossPoint:]
-    newKid = newKid1+newKid2
-    return newKid
+    num = random.uniform(0.0,1.0)
+    if num < probability:
+        crossPoint= random.randint(0,parentLen)
+        newKid1= p1[:crossPoint]
+        newKid2= p2[crossPoint:]
+        newKid = newKid1+newKid2
+        return newKid
+    else:
+        return p1
 
 
 def mutate(individual,probability,algorithm_object):
@@ -209,14 +213,15 @@ for n trails of running the GA/CGA
 lm = LM(0.02, 4,-0.5,2)
 rdm = Gauss(0,1)
 #map = lm
-probability = 0.01
-gen_size = 500
+probabilitym = 0.01
+probabilityc = 0.8
+gen_size = 50
 default_fitness= math.inf
 num_trails=50
-population_size=200
-individual_size=100
+population_size=50
+individual_size=50
 
-def EA(map,gen_size,probability,default_fitness,pop):
+def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 
 
     #evaluate the fitness
@@ -239,9 +244,9 @@ def EA(map,gen_size,probability,default_fitness,pop):
             p1 = get_parent(pop)
             p2 = get_parent(pop)
             #crossover
-            potential_child = crossover(p1,p2)
+            potential_child = crossover(p1,p2,probabilityc)
             #mutation
-            child = mutate(potential_child,probability,map)
+            child = mutate(potential_child,probabilitym,map)
             new_population.append([child, default_fitness])
 
         #make the new-population the next pop to work with
@@ -346,7 +351,7 @@ def plots():
         pop_GA = copy.deepcopy(pop)
         pop_CGA = copy.deepcopy(pop)
 
-        EA(lm,gen_size,probability,default_fitness,pop_CGA)# Run the CGA
+        EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc)# Run the CGA
         #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
         #print("\nGenArrayAv for CGA trail {}:".format(i+1))
         #print(genarrayav)
@@ -358,7 +363,7 @@ def plots():
         genarrayav.clear()
         genarraymin.clear()
 
-        EA(rdm,gen_size,probability,default_fitness,pop_GA)# Run the GA
+        EA(rdm,gen_size,probabilitym,default_fitness,pop_GA,probabilityc)# Run the GA
         #print("\nGenArrayAv for GA trail {}:".format(i+1))
         #print(genarrayav)
         avGA = genarrayav.copy()
