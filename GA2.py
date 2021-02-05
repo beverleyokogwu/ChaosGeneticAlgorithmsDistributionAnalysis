@@ -3,6 +3,8 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
+from scipy.stats import norm
+import seaborn as sns
 
 # generate random Gaussian values
 from numpy.random import seed
@@ -53,14 +55,17 @@ class Gauss:
     def next_val(self):
         return np.random.normal()
 
+    #Shift affects the mean, and scale affects the standard deviation!
     def shift_scale_next(self):
         return (self.next_val() + self.shift) * self.scale
 
 # Cubic Map class
 class Cubic:
-    def __init__(self,x_0,r,shift,scale):
-        self.x_0 = x_0
+    def __init__(self,x_0, r, shift, scale):
+        self.x = x_0
         self.r = r
+        self.shift= shift
+        self.scale = scale
 
     def next_val(self):
         self.x = (self.r * self.x *((self.x**2)-1.0))+self.x
@@ -72,6 +77,7 @@ class Cubic:
 def logisticMap(r, x_n):
     return r * x_n *(1.0-x_n)
 
+#unimodal
 def rosenbrock(array):
     #summation, sigma
     sigma=0
@@ -98,6 +104,7 @@ def griewank(array):
     return (float(sigma)/4000)-float(pi)+1
 
 
+#multimodal
 def rastrigin(array):
     #summation, sigma
     sigma=0
@@ -223,17 +230,17 @@ for n trails of running the GA/CGA
 
 
 #Use variables & make code more flexible
-lm = LM(0.02, 4,0,1)
-rdm = Gauss(0,1)
+lm = LM(0.02, 4,-0.5,2)
+rdm = Gauss(0,0.5)
 cbm = Cubic(0.02,3,0,1)
 #map = lm
-probabilitym = 0.01
+probabilitym = 0.1
 probabilityc = 0.8
-gen_size = 50
+gen_size = 500
 default_fitness= math.inf
 num_trails=50
 population_size=50
-individual_size=50
+individual_size=10
 
 def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 
@@ -377,7 +384,7 @@ def plots():
         genarrayav.clear()
         genarraymin.clear()
 
-        EA(rdm,gen_size,probabilitym,default_fitness,pop_GA,probabilityc)# Run the GA
+        EA(lm,gen_size,probabilitym,default_fitness,pop_GA,probabilityc)# Run the GA
         #print("\nGenArrayAv for GA trail {}:".format(i+1))
         #print(genarrayav)
         avGA = genarrayav.copy()
@@ -409,8 +416,11 @@ def plots():
         #print(mins2D_GA)
 
 
+
     CGA_mutd_values = mutd_values_CGA.copy()
     GA_mutd_values = mutd_values_GA.copy()
+    print(mutd_values_CGA)
+
 
 
     #HERE! - PRINT THE ARRAYS (WITH A SMALL SET) & COMPARE THEM
