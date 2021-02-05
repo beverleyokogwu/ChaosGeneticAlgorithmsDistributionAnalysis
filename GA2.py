@@ -235,8 +235,8 @@ rdm = Gauss(0,0.5)
 cbm = Cubic(0.02,3,0,1)
 #map = lm
 probabilitym = 0.1
-probabilityc = 0.8
-gen_size = 500
+probabilityc = 1
+gen_size = 100
 default_fitness= math.inf
 num_trails=50
 population_size=50
@@ -384,7 +384,7 @@ def plots():
         genarrayav.clear()
         genarraymin.clear()
 
-        EA(lm,gen_size,probabilitym,default_fitness,pop_GA,probabilityc)# Run the GA
+        EA(rdm,gen_size,probabilitym,default_fitness,pop_GA,probabilityc)# Run the GA
         #print("\nGenArrayAv for GA trail {}:".format(i+1))
         #print(genarrayav)
         avGA = genarrayav.copy()
@@ -419,7 +419,7 @@ def plots():
 
     CGA_mutd_values = mutd_values_CGA.copy()
     GA_mutd_values = mutd_values_GA.copy()
-    print(mutd_values_CGA)
+    #print(mutd_values_CGA)
 
 
 
