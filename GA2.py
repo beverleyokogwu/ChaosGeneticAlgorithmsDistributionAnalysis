@@ -136,8 +136,8 @@ def evaluate_fitness(population):
 
     for index in range(len(population)):
 
-        #bm_value = rosenbrock(population[index][0])
-        bm_value = rastrigin(population[index][0])
+        bm_value = rosenbrock(population[index][0])
+        #bm_value = rastrigin(population[index][0])
         fitarray.append(bm_value)
 
         # changes the fitness value
@@ -184,16 +184,21 @@ def get_parent(pop):
         return parentB
 
 def crossover(p1,p2,probability):
+    #print("In Crossover Function... \n parent1 = {}\n parent2 ={}".format(p1,p2))
+
     parentLen = len(p1)
     num = random.uniform(0.0,1.0)
     if num < probability:
         crossPoint= random.randint(0,parentLen)
+        #print("crosspoint={}".format(crossPoint))
         newKid1= p1[:crossPoint]
         newKid2= p2[crossPoint:]
         newKid = newKid1+newKid2
+        #print("The new Kid is {}".format(newKid))
         return newKid
     else:
-        return p1
+        #print("No crossover, so returning p1 = {}".format(p1))
+        return copy.deepcopy(p1)
 
 
 def mutate(individual,probability,algorithm_object):
@@ -232,15 +237,15 @@ for n trails of running the GA/CGA
 #Use variables & make code more flexible
 lm = LM(0.02, 4,-0.5,2)
 rdm = Gauss(0,0.5)
-cbm = Cubic(0.02,3,0,1)
+#cbm = Cubic(0.02,3,0,1)
 #map = lm
-probabilitym = 0.1
-probabilityc = 1
-gen_size = 100
+probabilitym = 0.2
+probabilityc = 0.8
+gen_size = 5
 default_fitness= math.inf
-num_trails=50
-population_size=50
-individual_size=10
+num_trails=1
+population_size=5
+individual_size=5
 
 def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 
@@ -259,6 +264,7 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
         # the best is the new pop -> may/may not do this | elitism
         new_population = [fittest]
 
+        #[g,g,g,g,g,g]
         #add to the new population:
         for i in range(len(pop)-1):
             #pick 2 parents
@@ -266,7 +272,9 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
             p2 = get_parent(pop)
             #crossover
             potential_child = crossover(p1,p2,probabilityc)
+            #potential_child = copy.deepcopy(p1)
             #mutation
+            #print("\t\tpotential child is: {}".format(potential_child))
             child = mutate(potential_child,probabilitym,map)
             new_population.append([child, default_fitness])
 
