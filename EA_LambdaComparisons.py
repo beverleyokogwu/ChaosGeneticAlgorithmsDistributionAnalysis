@@ -206,7 +206,7 @@ for n trails of running the GA/CGA
 
 #Use variables & make code more flexible
 
-#rdm = Gauss(0,1)
+
 #map = lm
 probability = 0.05
 gen_size = 1000
@@ -258,7 +258,7 @@ def EA(map,gen_size,probability,default_fitness,pop,bm):
     print("Ran Successfully!")
 
 
-def plotMapParameters(l1,l2,l3,benchmark):
+def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
     #list containing proposed x0s
     xZeros=[0.01,0.02,0.03,0.04,0.05,0.1,0.2,0.3,0.4,0.497]
 
@@ -274,6 +274,7 @@ def plotMapParameters(l1,l2,l3,benchmark):
         #HANDLE L1
         genarraymin.clear()
         lm = LM(xZeros[i], l1,-0.5,2)
+        rdm = Gauss(0,0.5)
         pop = generatePopulation(rdm, population_size, individual_size)
         EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
@@ -282,6 +283,7 @@ def plotMapParameters(l1,l2,l3,benchmark):
         #HANDLE L2
         genarraymin.clear()
         lm = LM(xZeros[i], l2,-0.5,2)
+        rdm = Gauss(0,0.5)
         pop = generatePopulation(rdm, population_size, individual_size)
         EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
@@ -290,6 +292,7 @@ def plotMapParameters(l1,l2,l3,benchmark):
         #HANDLE L3
         genarraymin.clear()
         lm = LM(xZeros[i], l3,-0.5,2)
+        rdm = Gauss(0,0.5)
         pop = generatePopulation(rdm, population_size, individual_size)
         EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
@@ -298,6 +301,7 @@ def plotMapParameters(l1,l2,l3,benchmark):
         #HANDLE L4
         genarraymin.clear()
         lm = LM(xZeros[i], l4,-0.5,2)
+        rdm = Gauss(0,0.5)
         pop = generatePopulation(rdm, population_size, individual_size)
         EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
@@ -306,6 +310,7 @@ def plotMapParameters(l1,l2,l3,benchmark):
         #HANDLE L5
         genarraymin.clear()
         lm = LM(xZeros[i], l5,-0.5,2)
+        rdm = Gauss(0,0.5)
         pop = generatePopulation(rdm, population_size, individual_size)
         EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
@@ -328,13 +333,19 @@ def plotMapParameters(l1,l2,l3,benchmark):
     x = [i for i in range(gen_size+1)]
 
 
-    plt.plot(x,l1_minFitness[0],color="orange",label=l1)
-    plt.plot(x,l2_minFitness[0],color="purple",label=l2)
+    plt.plot(x,l1_minFitness[0],color="red",label=l1)
+    plt.plot(x,l2_minFitness[0],color="orange",label=l2)
     plt.plot(x,l3_minFitness[0],color="green",label=l3)
+    plt.plot(x,l4_minFitness[0],color="blue",label=l4)
+    plt.plot(x,l5_minFitness[0],color="purple",label=l5)
+
     for index in range(1,len(l1_minFitness)):
-        plt.plot(x,l1_minFitness[index],color="orange")
-        plt.plot(x,l2_minFitness[index],color="purple")
+        plt.plot(x,l1_minFitness[index],color="red")
+        plt.plot(x,l2_minFitness[index],color="orange")
         plt.plot(x,l3_minFitness[index],color="green")
+        plt.plot(x,l4_minFitness[index],color="blue")
+        plt.plot(x,l5_minFitness[index],color="purple")
+
 
     plt.xlabel('generation')
     plt.ylabel('fitness')
@@ -348,6 +359,6 @@ def plotMapParameters(l1,l2,l3,benchmark):
 
 
 
-plotMapParameters(3.8,3.9,4.0,Rastrigin)
+plotMapParameters(3.6,3.7,3.8,3.9,4.0,Rastrigin)
 #plotMapParameters(3.8,3.9,4.0,Rosenbrock)
 #plotMapParameters(3.8,3.9,4.0,Griewank)
