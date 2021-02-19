@@ -266,13 +266,15 @@ def plotMapParameters(l1,l2,l3,benchmark):
     l1_minFitness =[]
     l2_minFitness =[]
     l3_minFitness =[]
+    l4_minFitness =[]
+    l5_minFitness =[]
 
     #run 10 instances...
     for i in range(len(xZeros)):
         #HANDLE L1
         genarraymin.clear()
         lm = LM(xZeros[i], l1,-0.5,2)
-        pop = generatePopulation(lm, population_size, individual_size)
+        pop = generatePopulation(rdm, population_size, individual_size)
         EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
         l1_minFitness.append(mn)
@@ -280,7 +282,7 @@ def plotMapParameters(l1,l2,l3,benchmark):
         #HANDLE L2
         genarraymin.clear()
         lm = LM(xZeros[i], l2,-0.5,2)
-        pop = generatePopulation(lm, population_size, individual_size)
+        pop = generatePopulation(rdm, population_size, individual_size)
         EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
         l2_minFitness.append(mn)
@@ -288,16 +290,34 @@ def plotMapParameters(l1,l2,l3,benchmark):
         #HANDLE L3
         genarraymin.clear()
         lm = LM(xZeros[i], l3,-0.5,2)
-        pop = generatePopulation(lm, population_size, individual_size)
+        pop = generatePopulation(rdm, population_size, individual_size)
         EA(lm,gen_size,probability,default_fitness,pop,benchmark)
         mn = genarraymin.copy()
         l3_minFitness.append(mn)
+
+        #HANDLE L4
+        genarraymin.clear()
+        lm = LM(xZeros[i], l4,-0.5,2)
+        pop = generatePopulation(rdm, population_size, individual_size)
+        EA(lm,gen_size,probability,default_fitness,pop,benchmark)
+        mn = genarraymin.copy()
+        l4_minFitness.append(mn)
+
+        #HANDLE L5
+        genarraymin.clear()
+        lm = LM(xZeros[i], l5,-0.5,2)
+        pop = generatePopulation(rdm, population_size, individual_size)
+        EA(lm,gen_size,probability,default_fitness,pop,benchmark)
+        mn = genarraymin.copy()
+        l5_minFitness.append(mn)
 
 
     #convert to np ARRAYS
     l1_minFitness = np.array(l1_minFitness)
     l2_minFitness = np.array(l2_minFitness)
     l3_minFitness = np.array(l3_minFitness)
+    l4_minFitness = np.array(l4_minFitness)
+    l5_minFitness = np.array(l5_minFitness)
 
     """
     for index in range(len(l1_minFitness)):
