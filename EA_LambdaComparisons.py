@@ -208,12 +208,12 @@ for n trails of running the GA/CGA
 
 #rdm = Gauss(0,1)
 #map = lm
-probability = 0.01
-gen_size = 500
+probability = 0.05
+gen_size = 1000
 default_fitness= math.inf
 num_trails=50
-population_size=100
-individual_size=50
+population_size=50
+individual_size=20
 
 def EA(map,gen_size,probability,default_fitness,pop,bm):
 
