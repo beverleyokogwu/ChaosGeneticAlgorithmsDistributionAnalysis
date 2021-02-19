@@ -271,6 +271,7 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
 
     #run 10 instances...
     for i in range(len(xZeros)):
+        '''
         #HANDLE L1
         genarraymin.clear()
         lm = LM(xZeros[i], l1,-0.5,2)
@@ -289,6 +290,7 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
         mn = genarraymin.copy()
         l2_minFitness.append(mn)
 
+        '''
         #HANDLE L3
         genarraymin.clear()
         lm = LM(xZeros[i], l3,-0.5,2)
@@ -318,8 +320,8 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
 
 
     #convert to np ARRAYS
-    l1_minFitness = np.array(l1_minFitness)
-    l2_minFitness = np.array(l2_minFitness)
+    #l1_minFitness = np.array(l1_minFitness)
+    #l2_minFitness = np.array(l2_minFitness)
     l3_minFitness = np.array(l3_minFitness)
     l4_minFitness = np.array(l4_minFitness)
     l5_minFitness = np.array(l5_minFitness)
@@ -333,15 +335,15 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
     x = [i for i in range(gen_size+1)]
 
 
-    plt.plot(x,l1_minFitness[0],color="red",label=l1)
-    plt.plot(x,l2_minFitness[0],color="orange",label=l2)
+    #plt.plot(x,l1_minFitness[0],color="red",label=l1)
+    #plt.plot(x,l2_minFitness[0],color="orange",label=l2)
     plt.plot(x,l3_minFitness[0],color="green",label=l3)
     plt.plot(x,l4_minFitness[0],color="blue",label=l4)
     plt.plot(x,l5_minFitness[0],color="purple",label=l5)
 
     for index in range(1,len(l1_minFitness)):
-        plt.plot(x,l1_minFitness[index],color="red")
-        plt.plot(x,l2_minFitness[index],color="orange")
+        #plt.plot(x,l1_minFitness[index],color="red")
+        #plt.plot(x,l2_minFitness[index],color="orange")
         plt.plot(x,l3_minFitness[index],color="green")
         plt.plot(x,l4_minFitness[index],color="blue")
         plt.plot(x,l5_minFitness[index],color="purple")
