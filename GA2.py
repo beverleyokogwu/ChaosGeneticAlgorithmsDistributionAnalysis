@@ -107,6 +107,7 @@ def griewank(array):
 #multimodal
 def rastrigin(array):
     #summation, sigma
+    #optimum value
     sigma=0
     # length of the array
     d = len(array)
@@ -136,8 +137,8 @@ def evaluate_fitness(population):
 
     for index in range(len(population)):
 
-        bm_value = rosenbrock(population[index][0])
-        #bm_value = rastrigin(population[index][0])
+        #bm_value = rosenbrock(population[index][0])
+        bm_value = rastrigin(population[index][0])
         fitarray.append(bm_value)
 
         # changes the fitness value
@@ -235,17 +236,17 @@ for n trails of running the GA/CGA
 
 
 #Use variables & make code more flexible
-lm = LM(0.02, 4,-0.5,2)
+lm = LM(0.02, 4.0,-0.5,2) #UPDATE FOR LAMBDA: Changing the .02 randomly each time. Then run the CGA vs GA.
 rdm = Gauss(0,0.5)
 #cbm = Cubic(0.02,3,0,1)
 #map = lm
-probabilitym = 0.2
+probabilitym = 0.05
 probabilityc = 0.8
-gen_size = 5
+gen_size = 10000
 default_fitness= math.inf
-num_trails=1
-population_size=5
-individual_size=5
+num_trails=50
+population_size=50
+individual_size=20
 
 def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 
@@ -484,6 +485,7 @@ def plots():
     plt.errorbar(x, avg_mins_GA, std_mins_GA,  label = "average-fitness of mins (GA)")
     """
 
+
     #REGULAR PLOTS AVG-AVG
     plt.plot(x, avg_avgs_CGA,  label = "average-fitness of averages (CGA)")
     plt.plot(x, avg_avgs_GA,  label = "average-fitness of averages (GA)")
@@ -513,6 +515,8 @@ def plots():
     plt.legend()
     plt.show()
 
+
+    '''
     #SUBPLOTS FOR ANG-AVG EAs
     fig,ax = plt.subplots(2,2)
     ax[0,0].errorbar(x, avg_avgs_GA,yerr=std_avgs_CGA )
@@ -530,21 +534,24 @@ def plots():
     ax[1,1].errorbar(x, avg_mins_CGA,yerr=std_mins_GA,color='red')
     ax[1,1].set_title('Average of Min Fitness per Genaration (CGA)')
     ax[1,1].grid('on')
-    plt.show()
+    #plt.show()
 
     #SUBPLOTS FOR DISTRIBUTIONS
+    '''
+
 
     plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
 
     plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
 
+    '''
     figs,axs = plt.subplots(2,1)
 
 
     axs[0]= plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
     axs[1]= plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
 
-
+    '''
     plt.show()
 
 
