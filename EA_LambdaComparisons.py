@@ -320,13 +320,7 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
     x = [i for i in range(gen_size+1)]
 
 
-    plt.plot(x,l1_minFitness[0],color="red",label=l1)
-    plt.plot(x,l2_minFitness[0],color="orange",label=l2)
-    plt.plot(x,l3_minFitness[0],color="green",label=l3)
-    plt.plot(x,l4_minFitness[0],color="blue",label=l4)
-    plt.plot(x,l5_minFitness[0],color="purple",label=l5)
-
-    for index in range(1,len(l3_minFitness)):
+    for index in range(0,len(l3_minFitness)):
         plt.plot(x,l1_minFitness[index],color="red")
         plt.plot(x,l2_minFitness[index],color="orange")
         plt.plot(x,l3_minFitness[index],color="green")
