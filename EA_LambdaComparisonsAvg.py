@@ -12,6 +12,7 @@ from numpy.random import randn
 
 #genarrayav=[]
 genarraymin=[]
+genarrayav=[]
 #mutd_values_CGA =[] #store the mutated values
 #mutd_values_GA =[] #store the mutated values
 
@@ -130,8 +131,8 @@ def evaluate_fitness(population,benchMark):
 
         # changes the fitness value
         population[index][1]=bm_value
-    #average = sum(fitarray)/len(fitarray)#average fitness of individuals at some generation
-    #genarrayav.append(average)
+    average = sum(fitarray)/len(fitarray)#average fitness of individuals at some generation
+    genarrayav.append(average)
     genarraymin.append(min(fitarray))
     #genarraymax.append(max(fitarray))
     #print(len(genarrayav))
@@ -171,13 +172,22 @@ def get_parent(pop):
         #print("{} is < than {}, so return {}".format(Bfit,Afit,Bfit))
         return parentB
 
-def crossover(p1,p2):
+def crossover(p1,p2,probability):
+    #print("In Crossover Function... \n parent1 = {}\n parent2 ={}".format(p1,p2))
+
     parentLen = len(p1)
-    crossPoint= random.randint(0,parentLen)
-    newKid1= p1[:crossPoint]
-    newKid2= p2[crossPoint:]
-    newKid = newKid1+newKid2
-    return newKid
+    num = random.uniform(0.0,1.0)
+    if num < probability:
+        crossPoint= random.randint(0,parentLen)
+        #print("crosspoint={}".format(crossPoint))
+        newKid1= p1[:crossPoint]
+        newKid2= p2[crossPoint:]
+        newKid = newKid1+newKid2
+        #print("The new Kid is {}".format(newKid))
+        return newKid
+    else:
+        #print("No crossover, so returning p1 = {}".format(p1))
+        return copy.deepcopy(p1)
 
 
 def mutate(individual,probability,algorithm_object):
@@ -208,14 +218,15 @@ for n trails of running the GA/CGA
 
 
 #map = lm
-probability = 0.05
+probabilitym = 0.05
+probabilityc = 0.8
 gen_size = 500
 default_fitness= math.inf
-num_trails=50
+num_trails=20
 population_size=50
 individual_size=20
 
-def EA(map,gen_size,probability,default_fitness,pop,bm):
+def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc,bm):
 
 
     #evaluate the fitness
@@ -232,15 +243,18 @@ def EA(map,gen_size,probability,default_fitness,pop,bm):
         # the best is the new pop -> may/may not do this | elitism
         new_population = [fittest]
 
+        #[g,g,g,g,g,g]
         #add to the new population:
         for i in range(len(pop)-1):
             #pick 2 parents
             p1 = get_parent(pop)
             p2 = get_parent(pop)
             #crossover
-            potential_child = crossover(p1,p2)
+            potential_child = crossover(p1,p2,probabilityc)
+            #potential_child = copy.deepcopy(p1)
             #mutation
-            child = mutate(potential_child,probability,map)
+            #print("\t\tpotential child is: {}".format(potential_child))
+            child = mutate(potential_child,probabilitym,map)
             new_population.append([child, default_fitness])
 
         #make the new-population the next pop to work with
@@ -257,16 +271,25 @@ def EA(map,gen_size,probability,default_fitness,pop,bm):
         #print("Generation {}: Fittest: {}".format(gen,fittest))
     print("Ran Successfully!")
 
-def getMinFitness(xZero,lambda_val,l_min_fitness_array,benchmark):
+
+def getMinAndAvgFitness(xZero,lambda_val,l_min_fitness_array,l_avg_fitness_array,benchmark):
     genarraymin.clear()
+    genarrayav.clear()
+
     lm = LM(xZero, lambda_val,-0.5,2)
     rdm = Gauss(0,0.5)
     pop = generatePopulation(rdm, population_size, individual_size)
-    EA(lm,gen_size,probability,default_fitness,pop,benchmark)
-    mn = genarraymin.copy()
-    l_min_fitness_array.append(mn)
+    EA(lm,gen_size,probabilitym,default_fitness,pop,probabilityc,benchmark)
 
-def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
+    mn = genarraymin.copy()
+    av = genarrayav.copy()
+
+    #print("mn array is {}".format(mn))
+    l_min_fitness_array.append(mn)
+    l_avg_fitness_array.append(av)
+
+
+def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
     #list containing proposed x0s
     xZeros=[0.01,0.02,0.03,0.04,0.05,0.1,0.2,0.3,0.4,0.497]
 
@@ -292,51 +315,112 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
     l4_minFitness =[]
     l5_minFitness =[]
 
-    #run 10 instances...
+    l1_avgFitness =[]
+    l2_avgFitness =[]
+    l3_avgFitness =[]
+    l4_avgFitness =[]
+    l5_avgFitness =[]
+
+    #print("Before run, the l fitness array is {}".format(l1_minFitness))
+
+    #run for 20 trails ...
+    for _ in range(num_trails):
+        getMinAndAvgFitness(xZeros[idx],l1,l1_minFitness,l1_avgFitness,benchmark)
+        #print("Min fitness array with x0: {} and lambda {} of {} size is {}\n\n".format(xZeros[0],l1,l1_minFitness,len(l1_minFitness)))
+        getMinAndAvgFitness(xZeros[idx],l2,l2_minFitness,l2_avgFitness,benchmark)
+        getMinAndAvgFitness(xZeros[idx],l3,l3_minFitness,l3_avgFitness,benchmark)
+        getMinAndAvgFitness(xZeros[idx],l4,l4_minFitness,l4_avgFitness,benchmark)
+        getMinAndAvgFitness(xZeros[idx],l5,l5_minFitness,l5_avgFitness,benchmark)
+
+
+
+
+
+
+    '''
     for i in range(len(xZeros)):
 
         getMinFitness(xZeros[i],l1,l1_minFitness,benchmark)
-        getMinFitness(xZeros[i],l2,l2_minFitness,benchmark)
-        getMinFitness(xZeros[i],l3,l3_minFitness,benchmark)
-        getMinFitness(xZeros[i],l4,l4_minFitness,benchmark)
-        getMinFitness(xZeros[i],l5,l5_minFitness,benchmark)
-
+        #print("Min fitness array with x0: {} and lambda {} of {} size is {}\n\n".format(xZeros[i],l1,l1_minFitness,len(l1_minFitness)))
+        #getMinFitness(xZeros[i],l2,l2_minFitness,benchmark)
+        #getMinFitness(xZeros[i],l3,l3_minFitness,benchmark)
+        #getMinFitness(xZeros[i],l4,l4_minFitness,benchmark)
+        #getMinFitness(xZeros[i],l5,l5_minFitness,benchmark)
+    '''
 
 
 
     #convert to np ARRAYS
-    l1_minFitness = np.array(l1_minFitness)
-    l2_minFitness = np.array(l2_minFitness)
-    l3_minFitness = np.array(l3_minFitness)
-    l4_minFitness = np.array(l4_minFitness)
-    l5_minFitness = np.array(l5_minFitness)
+    l1_minFitnessAvg = np.mean(np.array(copy.deepcopy(l1_minFitness)),axis=0)
+    l2_minFitnessAvg = np.mean(np.array(copy.deepcopy(l2_minFitness)),axis=0)
+    l3_minFitnessAvg = np.mean(np.array(copy.deepcopy(l3_minFitness)),axis=0)
+    l4_minFitnessAvg = np.mean(np.array(copy.deepcopy(l4_minFitness)),axis=0)
+    l5_minFitnessAvg = np.mean(np.array(copy.deepcopy(l5_minFitness)),axis=0)
 
-    """
-    for index in range(len(l1_minFitness)):
-        print(index)
-        print(l3_minFitness[index])
-    """
+    l1_avgFitnessAvg = np.mean(np.array(copy.deepcopy(l1_avgFitness)),axis=0)
+    l2_avgFitnessAvg = np.mean(np.array(copy.deepcopy(l2_avgFitness)),axis=0)
+    l3_avgFitnessAvg = np.mean(np.array(copy.deepcopy(l3_avgFitness)),axis=0)
+    l4_avgFitnessAvg = np.mean(np.array(copy.deepcopy(l4_avgFitness)),axis=0)
+    l5_avgFitnessAvg = np.mean(np.array(copy.deepcopy(l5_avgFitness)),axis=0)
+
+
+
+    print("the length of the average fitness is {}".format(l1_minFitnessAvg.size))
+
+    #l1_minFitness = np.array(l1_minFitness)
+    #l2_minFitness = np.array(l2_minFitness)
+    #l3_minFitness = np.array(l3_minFitness)
+    #l4_minFitness = np.array(l4_minFitness)
+    #l5_minFitness = np.array(l5_minFitness)
+
+
+
     #Let's plot
     x = [i for i in range(gen_size+1)]
 
+    #plt.plot(x,l1_minFitnessAvg,color = "blue")
 
-    plt.plot(x,l1_minFitness[0],color="red",label=l1)
-    plt.plot(x,l2_minFitness[0],color="orange",label=l2)
-    plt.plot(x,l3_minFitness[0],color="green",label=l3)
-    plt.plot(x,l4_minFitness[0],color="blue",label=l4)
-    plt.plot(x,l5_minFitness[0],color="purple",label=l5)
 
-    for index in range(1,len(l3_minFitness)):
-        plt.plot(x,l1_minFitness[index],color="red")
-        plt.plot(x,l2_minFitness[index],color="orange")
-        plt.plot(x,l3_minFitness[index],color="green")
-        plt.plot(x,l4_minFitness[index],color="blue")
-        plt.plot(x,l5_minFitness[index],color="purple")
+    plt.plot(x,l1_minFitnessAvg,color="red",label=l1)
+    plt.plot(x,l2_minFitnessAvg,color="orange",label=l2)
+    plt.plot(x,l3_minFitnessAvg,color="green",label=l3)
+    plt.plot(x,l4_minFitnessAvg,color="blue",label=l4)
+    plt.plot(x,l5_minFitnessAvg,color="purple",label=l5)
+
+    '''
+    for index in range(1,len(l1_minFitness2D)):
+        plt.plot(x,l1_minFitness2D[index],color="red")
+        #plt.plot(x,l2_minFitness[index],color="orange")
+        #plt.plot(x,l3_minFitness[index],color="green")
+        #plt.plot(x,l4_minFitness[index],color="blue")
+        #plt.plot(x,l5_minFitness[index],color="purple")
+    '''
 
 
     plt.xlabel('generation')
     plt.ylabel('fitness')
-    plt.title('Logistic Map on {} Fitness Function'.format(benchmark.__name__))
+    plt.title('Logistic Map on {} Fitness Function for x0 = {}, Min Fitness'.format(benchmark.__name__,xZeros[idx]))
+
+    # show a legend on the plot
+    plt.legend()
+    plt.show()
+
+
+    # PLOTS FOR AVERAGE FITNESS
+    x = [i for i in range(gen_size+1)]
+
+    #plt.plot(x,l1_minFitnessAvg,color = "blue")
+
+
+    plt.plot(x,l1_avgFitnessAvg,color="red",label=l1)
+    plt.plot(x,l2_avgFitnessAvg,color="orange",label=l2)
+    plt.plot(x,l3_avgFitnessAvg,color="green",label=l3)
+    plt.plot(x,l4_avgFitnessAvg,color="blue",label=l4)
+    plt.plot(x,l5_avgFitnessAvg,color="purple",label=l5)
+
+    plt.xlabel('generation')
+    plt.ylabel('fitness')
+    plt.title('Logistic Map on {} Fitness Function for x0 = {}, Average Fitness'.format(benchmark.__name__,xZeros[idx]))
 
     # show a legend on the plot
     plt.legend()
@@ -346,6 +430,6 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
 
 
 
-plotMapParameters(3.6,3.7,3.8,3.9,4.0,Rastrigin)
+plotMapParameters(3.6,3.7,3.8,3.9,4.0,Rastrigin,1)
 #plotMapParameters(3.8,3.9,4.0,Rosenbrock)
 #plotMapParameters(3.8,3.9,4.0,Griewank)
