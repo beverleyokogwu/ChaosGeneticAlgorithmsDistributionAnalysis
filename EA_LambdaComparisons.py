@@ -209,7 +209,7 @@ for n trails of running the GA/CGA
 
 #map = lm
 probability = 0.05
-gen_size = 1000
+gen_size = 500
 default_fitness= math.inf
 num_trails=50
 population_size=50
@@ -257,10 +257,33 @@ def EA(map,gen_size,probability,default_fitness,pop,bm):
         #print("Generation {}: Fittest: {}".format(gen,fittest))
     print("Ran Successfully!")
 
+def getMinFitness(xZero,lambda_val,l_min_fitness_array,benchmark):
+    genarraymin.clear()
+    lm = LM(xZero, lambda_val,-0.5,2)
+    rdm = Gauss(0,0.5)
+    pop = generatePopulation(rdm, population_size, individual_size)
+    EA(lm,gen_size,probability,default_fitness,pop,benchmark)
+    mn = genarraymin.copy()
+    l_min_fitness_array.append(mn)
 
 def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
     #list containing proposed x0s
     xZeros=[0.01,0.02,0.03,0.04,0.05,0.1,0.2,0.3,0.4,0.497]
+
+    '''
+    Run with each of these values and run it with those results for 10-20 trails.
+    Similar to the GA2.py file.
+    '''
+
+    '''
+    Run with average and pick a random x0 each time to plot it. (Like GA2.py for every trail.)
+
+    Then run the CGA VS GA with it.
+    EXPECTATION: Should be the same.
+    '''
+
+
+
 
     #store the values to plot
     l1_minFitness =[]
@@ -271,57 +294,19 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
 
     #run 10 instances...
     for i in range(len(xZeros)):
-        '''
-        #HANDLE L1
-        genarraymin.clear()
-        lm = LM(xZeros[i], l1,-0.5,2)
-        rdm = Gauss(0,0.5)
-        pop = generatePopulation(rdm, population_size, individual_size)
-        EA(lm,gen_size,probability,default_fitness,pop,benchmark)
-        mn = genarraymin.copy()
-        l1_minFitness.append(mn)
 
-        #HANDLE L2
-        genarraymin.clear()
-        lm = LM(xZeros[i], l2,-0.5,2)
-        rdm = Gauss(0,0.5)
-        pop = generatePopulation(rdm, population_size, individual_size)
-        EA(lm,gen_size,probability,default_fitness,pop,benchmark)
-        mn = genarraymin.copy()
-        l2_minFitness.append(mn)
+        getMinFitness(xZeros[i],l1,l1_minFitness,benchmark)
+        getMinFitness(xZeros[i],l2,l2_minFitness,benchmark)
+        getMinFitness(xZeros[i],l3,l3_minFitness,benchmark)
+        getMinFitness(xZeros[i],l4,l4_minFitness,benchmark)
+        getMinFitness(xZeros[i],l5,l5_minFitness,benchmark)
 
-        '''
-        #HANDLE L3
-        genarraymin.clear()
-        lm = LM(xZeros[i], l3,-0.5,2)
-        rdm = Gauss(0,0.5)
-        pop = generatePopulation(rdm, population_size, individual_size)
-        EA(lm,gen_size,probability,default_fitness,pop,benchmark)
-        mn = genarraymin.copy()
-        l3_minFitness.append(mn)
 
-        #HANDLE L4
-        genarraymin.clear()
-        lm = LM(xZeros[i], l4,-0.5,2)
-        rdm = Gauss(0,0.5)
-        pop = generatePopulation(rdm, population_size, individual_size)
-        EA(lm,gen_size,probability,default_fitness,pop,benchmark)
-        mn = genarraymin.copy()
-        l4_minFitness.append(mn)
-
-        #HANDLE L5
-        genarraymin.clear()
-        lm = LM(xZeros[i], l5,-0.5,2)
-        rdm = Gauss(0,0.5)
-        pop = generatePopulation(rdm, population_size, individual_size)
-        EA(lm,gen_size,probability,default_fitness,pop,benchmark)
-        mn = genarraymin.copy()
-        l5_minFitness.append(mn)
 
 
     #convert to np ARRAYS
-    #l1_minFitness = np.array(l1_minFitness)
-    #l2_minFitness = np.array(l2_minFitness)
+    l1_minFitness = np.array(l1_minFitness)
+    l2_minFitness = np.array(l2_minFitness)
     l3_minFitness = np.array(l3_minFitness)
     l4_minFitness = np.array(l4_minFitness)
     l5_minFitness = np.array(l5_minFitness)
@@ -335,15 +320,15 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
     x = [i for i in range(gen_size+1)]
 
 
-    #plt.plot(x,l1_minFitness[0],color="red",label=l1)
-    #plt.plot(x,l2_minFitness[0],color="orange",label=l2)
+    plt.plot(x,l1_minFitness[0],color="red",label=l1)
+    plt.plot(x,l2_minFitness[0],color="orange",label=l2)
     plt.plot(x,l3_minFitness[0],color="green",label=l3)
     plt.plot(x,l4_minFitness[0],color="blue",label=l4)
     plt.plot(x,l5_minFitness[0],color="purple",label=l5)
 
-    for index in range(1,len(l1_minFitness)):
-        #plt.plot(x,l1_minFitness[index],color="red")
-        #plt.plot(x,l2_minFitness[index],color="orange")
+    for index in range(1,len(l3_minFitness)):
+        plt.plot(x,l1_minFitness[index],color="red")
+        plt.plot(x,l2_minFitness[index],color="orange")
         plt.plot(x,l3_minFitness[index],color="green")
         plt.plot(x,l4_minFitness[index],color="blue")
         plt.plot(x,l5_minFitness[index],color="purple")
