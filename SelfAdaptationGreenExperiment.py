@@ -203,7 +203,7 @@ def crossover(p1,p2,probability):
         return copy.deepcopy(p1)
 
 
-def mutate(individual,probability,algorithm_object):
+def mutate(individual,probability,algorithm_object,generation_num):
 
 
     #for each individual's genes, get a random number between 0 and 1
@@ -224,6 +224,8 @@ def mutate(individual,probability,algorithm_object):
 
     return individual
 
+
+
 def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 
 
@@ -238,6 +240,11 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 
     # so far within constraints
     while fittest[1]>0 and gen <gen_size:
+
+        if gen > 250:
+
+            map = LM(initial_x_0, 4.0,lm_shift, lm_scale)
+
         # the best is the new pop -> may/may not do this | elitism
         new_population = [fittest]
 
@@ -252,7 +259,7 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
             #potential_child = copy.deepcopy(p1)
             #mutation
             #print("\t\tpotential child is: {}".format(potential_child))
-            child = mutate(potential_child,probabilitym,map)
+            child = mutate(potential_child,probabilitym,map,gen)
             new_population.append([child, default_fitness])
 
         #make the new-population the next pop to work with
@@ -271,7 +278,7 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 
 
 
-def self_adaptation_test():
+def self_adaptation_test_1():
 
     #Run first with one r value
     for i in range(num_trails):
@@ -279,12 +286,19 @@ def self_adaptation_test():
         pop_CGA = copy.deepcopy(pop)
         EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc)# Run the CGA
 
+
+
+
     CGA_mutd_values = mutd_values_CGA.copy()
-    GA_mutd_values = mutd_values_GA.copy()
+    title = 'Shift-Scale Distributions for CGA with r = {}'.format(lm.r)
 
-    x = [i for i in range(gen_size+1)]
+    plotHistogram(CGA_mutd_values,title)
 
-    plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
+    #Change r and run again
+    mutd_values_CGA.clear()
+
+
+
 
 
 
@@ -295,7 +309,7 @@ DRIVER
 
 #Use variables & make code more flexible
 initial_x_0 = 0.02
-cm_parameter = 4.0
+cm_parameter = 3.7
 lm_shift= -0.5
 lm_scale = 2
 rdm_shift = 0
@@ -311,4 +325,4 @@ population_size=50
 individual_size=20
 
 
-self_adaptation_test()
+self_adaptation_test_1()
