@@ -224,31 +224,6 @@ def mutate(individual,probability,algorithm_object):
 
     return individual
 
-
-# THE GA DRIVER
-
-#generate the initial population  [[[array of 100 LM values],inf], [,]...] //total = 200
-'''
-This is a simple function/code that calculates the average and std. dev
-for n trails of running the GA/CGA
-'''
-
-
-
-
-#Use variables & make code more flexible
-lm = LM(0.02, 4.0,-0.5,2) #UPDATE FOR LAMBDA: Changing the .02 randomly each time. Then run the CGA vs GA.
-rdm = Gauss(0,0.5)
-#cbm = Cubic(0.02,3,0,1)
-#map = lm
-probabilitym = 0.05
-probabilityc = 0.8
-gen_size = 500
-default_fitness= math.inf
-num_trails=50
-population_size=50
-individual_size=20
-
 def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 
 
@@ -295,276 +270,45 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
     print("Ran Successfully!")
 
 
-    '''
-    #Plot Stuff
-    # average fitness points
-    x1 = [x for x in range(gen+1)]
-    y1 = genarrayav
-    # plotting the line 1 points
-    plt.plot(x1, y1, label = "average-fitness")
 
+def self_adaptation_test():
 
-
-    # min fitness points
-    x2 = [x for x in range(gen+1)]
-    y2 = genarraymin
-    # plotting the line 2 points
-    plt.plot(x2, y2, label = "min-fitness")
-
-    # naming the x axis
-    plt.xlabel('generation')
-    # naming the y axis
-    plt.ylabel('fitness')
-    # giving a title to my graph
-    plt.title('Average and Min Fitness per Generation')
-
-    # show a legend on the plot
-    plt.legend()
-
-    # function to show the plot
-    #test git --> 10/31/2020 11:15pm
-    #second test --> 11/02/2020 00:03am
-    plt.show()
-    '''
-
-
-
-def plots():
-    #mean and standard deviation plots
-    avgs2D_CGA=[]
-    mins2D_CGA=[]
-
-    avgs2D_GA=[]
-    mins2D_GA=[]
-
-
-    """
-    IDEA: Statistically start from the same population
-    Approach #1-->THIS IS THE APPROACH USED IN THIS FILE:
-    New trail will be one run of CGA & GA, where we start at the same initial population (still Gaussian? LM?).
-    - will change outside the EA method
-    - gen pop
-    - make copies
-    - use one copy for the GA
-    - use one copy for the CGA
-    • guarantees the performance on the same init pop
-
-    Approach #2:
-    Gen the population using Gaussian rather than LM
-    - will change within the EA method. Every trail will have a different init pop, but generated the same way.
-    • possible, but unlikely that the GA gets bad pops (pop picked when EA is ran, the pop made the GA perform poorly)
-     and the CGA gets good pops over some number of trails.
-
-    HOW to know which approach is better than the other?
-    Do either approach reduce the likelihood of one of the algorithms looking better by chance?
-    We don't want a set of results to show one better than the other because of the initial pops picked.
-    Need a fair expeiment- truth vs chance
-
-    • Multiple trails can reduce the chance
-
-    """
-    #DEALS WITH CGA & GA (merged ^^)
+    #Run first with one r value
     for i in range(num_trails):
-
-        #reset
-        #print("\n\nClearing the arrays for generating the averages and mins")
-        genarrayav.clear()
-        genarraymin.clear()
-        #print("The arrays are now: ")
-        #print(genarrayav)
-        #print(genarraymin)
-
-        #print("Running the {} instance of the CGA & GA".format(i+1))
-        #generate the initial population
         pop = generatePopulation(rdm, population_size, individual_size)
-
-        #make copies--> adjustment for approach#1. the arrays are independent of each other.
-        pop_GA = copy.deepcopy(pop)
         pop_CGA = copy.deepcopy(pop)
-
         EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc)# Run the CGA
-        #print("The avg array has {} elements (should be 500 ish)".format(len(genarrayav)))
-        #print("\nGenArrayAv for CGA trail {}:".format(i+1))
-        #print(genarrayav)
-        av = genarrayav.copy()
-        #print("GenArrayMin for CGA trail {}:".format(i+1))
-        #print(genarraymin)
-        mn = genarraymin.copy()
-
-        genarrayav.clear()
-        genarraymin.clear()
-
-        EA(rdm,gen_size,probabilitym,default_fitness,pop_GA,probabilityc)# Run the GA
-        #print("\nGenArrayAv for GA trail {}:".format(i+1))
-        #print(genarrayav)
-        avGA = genarrayav.copy()
-
-        #print("GenArrayMin for GA trail {}:".format(i+1))
-        #print(genarraymin)
-        mnGA = genarraymin.copy()
-
-        #print("Before appending to the 2Ds, the arrays contain:\navgs2D_CGA:")
-        #print(avgs2D_CGA)
-        #print("mins2D_CGA:")
-        #print(mins2D_CGA)
-
-        #print("Appending genarrayav and genarraymin to the avgs2D_CGA and mins2D_CGA respectively...")
-        avgs2D_CGA.append(av) # add the average fitness across generations
-        #print("avgs2D_CGA now contains...")
-        #print(avgs2D_CGA)
-        mins2D_CGA.append(mn)# add the min fitness across generations to the 2D array
-        #print("mins2D_CGA now contains...")
-        #print(mins2D_CGA)
-
-        #Append for GA:
-        #print("Appending genarrayav and genarraymin to the avgs2D_GA and mins2D_GA respectively...")
-        avgs2D_GA.append(avGA) # add the average fitness across generations
-        #print("avgs2D_GA now contains...")
-        #print(avgs2D_GA)
-        mins2D_GA.append(mnGA)# add the min fitness across generations to the 2D array
-        #print("mins2D_GA now contains...")
-        #print(mins2D_GA)
-
-
 
     CGA_mutd_values = mutd_values_CGA.copy()
     GA_mutd_values = mutd_values_GA.copy()
-    #print(mutd_values_CGA)
 
-
-
-    #HERE! - PRINT THE ARRAYS (WITH A SMALL SET) & COMPARE THEM
-    print("\nTHE 2D ARRAYS FOR GA AND CGA ARE DONE!!!!")
-
-    '''
-    print(avgs2D_CGA)
-    print("MINS-")
-    print(mins2D_CGA)
-
-    print("\nGA:\nAVERAGES-")
-    print(avgs2D_GA)
-    print("MINS-")
-    print(mins2D_GA)
-
-    print("\n\n\nTHE SHIFT SCALE VALUES ARE:\nCGA:")
-    print(CGA_mutd_values)
-    print("GA:")
-    print(GA_mutd_values)
-    '''
-
-    #at the end, should have two 2D arrays
-    #use the np mean and std dev to compute them in an array
-    avgs2D_CGA = np.array(avgs2D_CGA)
-    mins2D_CGA = np.array(mins2D_CGA)
-    avgs2D_GA = np.array(avgs2D_GA)
-    mins2D_GA = np.array(mins2D_GA)
-
-
-
-    std_avgs_CGA = np.std(avgs2D_CGA,axis=0)
-    std_mins_CGA = np.std(mins2D_CGA,axis=0)
-    avg_avgs_CGA = np.mean(avgs2D_CGA,axis=0)
-    avg_mins_CGA = np.mean(mins2D_CGA,axis=0)
-
-
-    #GA
-    std_avgs_GA = np.std(avgs2D_GA,axis=0)
-    std_mins_GA = np.std(mins2D_GA,axis=0)
-    avg_avgs_GA = np.mean(avgs2D_GA,axis=0)
-    avg_mins_GA = np.mean(mins2D_GA,axis=0)
-    #print(len(avgs2D[0]))
-    #print(len(avg_mins))
-    #print(std_avgs)
-    #print(avg_avgs)
-    #plot for averages
     x = [i for i in range(gen_size+1)]
-    #x2 = [i for i in range(gen_size)]
-    """
-    plt.errorbar(x, avg_avgs_CGA, std_avgs_CGA, label = "average-fitness of averages (CGA)")
-    plt.errorbar(x, avg_mins_CGA, std_mins_CGA,  label = "average-fitness of mins (CGA)")
-    plt.errorbar(x, avg_avgs_GA, std_avgs_GA,  label = "average-fitness of averages (GA)")
-    plt.errorbar(x, avg_mins_GA, std_mins_GA,  label = "average-fitness of mins (GA)")
-    """
-
-
-    #REGULAR PLOTS AVG-AVG
-    '''
-
-    plt.plot(x, avg_avgs_CGA,  label = "average-fitness of averages (CGA)")
-    plt.plot(x, avg_avgs_GA,  label = "average-fitness of averages (GA)")
-    # naming the x axis
-    plt.xlabel('generation')
-    # naming the y axis
-    plt.ylabel('fitness')
-    # giving a title to my graph
-    plt.title('Average of Average Fitness per Generation')
-
-    # show a legend on the plot
-    plt.legend()
-    plt.show()
-
-    #REGULAR PLOTS AVG-MINS
-    plt.plot(x, avg_mins_CGA,   label = "average-fitness of mins (CGA)")
-    plt.plot(x, avg_mins_GA,  label = "average-fitness of mins (GA)")
-
-    # naming the x axis
-    plt.xlabel('generation')
-    # naming the y axis
-    plt.ylabel('fitness')
-    # giving a title to my graph
-    plt.title('Average of Min Fitness per Generation')
-
-    # show a legend on the plot
-    plt.legend()
-    plt.show()
-    '''
-
-    '''
-    #SUBPLOTS FOR ANG-AVG EAs
-    fig,ax = plt.subplots(2,2)
-    ax[0,0].errorbar(x, avg_avgs_GA,yerr=std_avgs_CGA )
-    ax[0,0].set_title('Average of Average Fitness per Genaration (GA)')
-    ax[0,0].grid('on')
-
-    ax[1,0].errorbar(x, avg_avgs_CGA,yerr=std_avgs_GA,color='green')
-    ax[1,0].set_title('Average of Average Fitness per Genaration (CGA)')
-    ax[1,0].grid('on')
-
-    ax[0,1].errorbar(x, avg_mins_GA,yerr=std_mins_CGA,color='orange')
-    ax[0,1].set_title('Average of Min Fitness per Genaration (GA)')
-    ax[0,1].grid('on')
-
-    ax[1,1].errorbar(x, avg_mins_CGA,yerr=std_mins_GA,color='red')
-    ax[1,1].set_title('Average of Min Fitness per Genaration (CGA)')
-    ax[1,1].grid('on')
-    #plt.show()
-
-    #SUBPLOTS FOR DISTRIBUTIONS
-    '''
-
 
     plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
 
-    #plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
-
-    '''
-    figs,axs = plt.subplots(2,1)
-
-
-    axs[0]= plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
-    axs[1]= plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
-
-    '''
-    plt.show()
 
 
 
+'''
+DRIVER
+'''
 
-plots()
+#Use variables & make code more flexible
+initial_x_0 = 0.02
+cm_parameter = 4.0
+lm_shift= -0.5
+lm_scale = 2
+rdm_shift = 0
+rdm_scale = 0.5
+lm = LM(initial_x_0, cm_parameter,lm_shift, lm_scale)
+rdm = Gauss(rdm_shift,rdm_scale)
+probabilitym = 0.05
+probabilityc = 0.8
+gen_size = 500
+default_fitness= math.inf
+num_trails=50
+population_size=50
+individual_size=20
 
 
-
-
-
-
-#EA(lm,gen_size,probability,default_fitness)
+self_adaptation_test()
