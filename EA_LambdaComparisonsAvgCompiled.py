@@ -222,9 +222,11 @@ probabilitym = 0.05
 probabilityc = 0.8
 gen_size = 500
 default_fitness= math.inf
-num_trails=20
+num_trails=10
 population_size=50
 individual_size=20
+lm = LM(0.02, 4.0,-0.5,2)
+rdm = Gauss(0,0.5)
 
 def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc,bm):
 
@@ -289,7 +291,7 @@ def getMinAndAvgFitness(xZero,lambda_val,l_min_fitness_array,l_avg_fitness_array
     l_avg_fitness_array.append(av)
 
 
-def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
+def plotMapParameters(l1,l2,l3,l4,l5,benchmark):
     #list containing proposed x0s
     xZeros=[0.01,0.02,0.03,0.04,0.05,0.1,0.2,0.3,0.4,0.497]
 
@@ -321,10 +323,22 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
     l4_avgFitness =[]
     l5_avgFitness =[]
 
+    l1_minCombined =[]
+    l2_minCombined =[]
+    l3_minCombined =[]
+    l4_minCombined =[]
+    l5_minCombined =[]
+
+    l1_avgCombined =[]
+    l2_avgCombined =[]
+    l3_avgCombined =[]
+    l4_avgCombined =[]
+    l5_avgCombined =[]
+
     #print("Before run, the l fitness array is {}".format(l1_minFitness))
 
     #run for 20 trails ...
-    for _ in range(num_trails):
+    for idx in range(num_trails):
         getMinAndAvgFitness(xZeros[idx],l1,l1_minFitness,l1_avgFitness,benchmark)
         #print("Min fitness array with x0: {} and lambda {} of {} size is {}\n\n".format(xZeros[0],l1,l1_minFitness,len(l1_minFitness)))
         getMinAndAvgFitness(xZeros[idx],l2,l2_minFitness,l2_avgFitness,benchmark)
@@ -332,21 +346,6 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
         getMinAndAvgFitness(xZeros[idx],l4,l4_minFitness,l4_avgFitness,benchmark)
         getMinAndAvgFitness(xZeros[idx],l5,l5_minFitness,l5_avgFitness,benchmark)
 
-
-
-
-
-
-    '''
-    for i in range(len(xZeros)):
-
-        getMinFitness(xZeros[i],l1,l1_minFitness,benchmark)
-        #print("Min fitness array with x0: {} and lambda {} of {} size is {}\n\n".format(xZeros[i],l1,l1_minFitness,len(l1_minFitness)))
-        #getMinFitness(xZeros[i],l2,l2_minFitness,benchmark)
-        #getMinFitness(xZeros[i],l3,l3_minFitness,benchmark)
-        #getMinFitness(xZeros[i],l4,l4_minFitness,benchmark)
-        #getMinFitness(xZeros[i],l5,l5_minFitness,benchmark)
-    '''
 
 
 
@@ -364,14 +363,31 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
     l5_avgFitnessAvg = np.mean(np.array(copy.deepcopy(l5_avgFitness)),axis=0)
 
 
+    l1_minCombined.append(l1_minFitnessAvg)
+    l2_minCombined.append(l1_minFitnessAvg)
+    l3_minCombined.append(l1_minFitnessAvg)
+    l4_minCombined.append(l1_minFitnessAvg)
+    l5_minCombined.append(l1_minFitnessAvg)
 
-    print("the length of the average fitness is {}".format(l1_minFitnessAvg.size))
+    l1_avgCombined.append(l1_avgFitnessAvg)
+    l2_avgCombined.append(l2_avgFitnessAvg)
+    l3_avgCombined.append(l3_avgFitnessAvg)
+    l4_avgCombined.append(l4_avgFitnessAvg)
+    l5_avgCombined.append(l5_avgFitnessAvg)
 
-    #l1_minFitness = np.array(l1_minFitness)
-    #l2_minFitness = np.array(l2_minFitness)
-    #l3_minFitness = np.array(l3_minFitness)
-    #l4_minFitness = np.array(l4_minFitness)
-    #l5_minFitness = np.array(l5_minFitness)
+
+
+    l1_minCombined = np.mean(np.array(copy.deepcopy(l1_minCombined)),axis=0)
+    l2_minCombined = np.mean(np.array(copy.deepcopy(l2_minCombined)),axis=0)
+    l3_minCombined = np.mean(np.array(copy.deepcopy(l3_minCombined)),axis=0)
+    l4_minCombined = np.mean(np.array(copy.deepcopy(l4_minCombined)),axis=0)
+    l5_minCombined = np.mean(np.array(copy.deepcopy(l5_minCombined)),axis=0)
+
+    l1_avgCombined = np.mean(np.array(copy.deepcopy(l1_avgCombined)),axis=0)
+    l2_avgCombined = np.mean(np.array(copy.deepcopy(l2_avgCombined)),axis=0)
+    l3_avgCombined = np.mean(np.array(copy.deepcopy(l3_avgCombined)),axis=0)
+    l4_avgCombined = np.mean(np.array(copy.deepcopy(l4_avgCombined)),axis=0)
+    l5_avgCombined = np.mean(np.array(copy.deepcopy(l5_avgCombined)),axis=0)
 
 
 
@@ -381,25 +397,16 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
     #plt.plot(x,l1_minFitnessAvg,color = "blue")
 
 
-    plt.plot(x,l1_minFitnessAvg,color="red",label=l1)
-    plt.plot(x,l2_minFitnessAvg,color="orange",label=l2)
-    plt.plot(x,l3_minFitnessAvg,color="green",label=l3)
-    plt.plot(x,l4_minFitnessAvg,color="blue",label=l4)
-    plt.plot(x,l5_minFitnessAvg,color="purple",label=l5)
-
-    '''
-    for index in range(1,len(l1_minFitness2D)):
-        plt.plot(x,l1_minFitness2D[index],color="red")
-        #plt.plot(x,l2_minFitness[index],color="orange")
-        #plt.plot(x,l3_minFitness[index],color="green")
-        #plt.plot(x,l4_minFitness[index],color="blue")
-        #plt.plot(x,l5_minFitness[index],color="purple")
-    '''
+    plt.plot(x,l1_minCombined,color="red",label=l1)
+    plt.plot(x,l2_minCombined,color="orange",label=l2)
+    plt.plot(x,l3_minCombined,color="green",label=l3)
+    plt.plot(x,l4_minCombined,color="blue",label=l4)
+    plt.plot(x,l5_minCombined,color="purple",label=l5)
 
 
     plt.xlabel('generation')
     plt.ylabel('fitness')
-    plt.title('Logistic Map on {} Fitness Function for x0 = {}, Min Fitness'.format(benchmark.__name__,xZeros[idx]))
+    plt.title('Logistic Map on {} Fitness Function, Min Fitness Combined'.format(benchmark.__name__))
 
     # show a legend on the plot
     plt.legend()
@@ -412,19 +419,21 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
     #plt.plot(x,l1_minFitnessAvg,color = "blue")
 
 
-    plt.plot(x,l1_avgFitnessAvg,color="red",label=l1)
-    plt.plot(x,l2_avgFitnessAvg,color="orange",label=l2)
-    plt.plot(x,l3_avgFitnessAvg,color="green",label=l3)
-    plt.plot(x,l4_avgFitnessAvg,color="blue",label=l4)
-    plt.plot(x,l5_avgFitnessAvg,color="purple",label=l5)
+    plt.plot(x,l1_avgCombined,color="red",label=l1)
+    plt.plot(x,l2_avgCombined,color="orange",label=l2)
+    plt.plot(x,l3_avgCombined,color="green",label=l3)
+    plt.plot(x,l4_avgCombined,color="blue",label=l4)
+    plt.plot(x,l5_avgCombined,color="purple",label=l5)
 
     plt.xlabel('generation')
     plt.ylabel('fitness')
-    plt.title('Logistic Map on {} Fitness Function for x0 = {}, Average Fitness'.format(benchmark.__name__,xZeros[idx]))
+    plt.title('Logistic Map on {} Fitness Function , Average Fitness Combined'.format(benchmark.__name__))
 
     # show a legend on the plot
     plt.legend()
     plt.show()
+
+    '''
 
     #CGA vs GA comparison
     for i in range(num_trails):
@@ -436,14 +445,14 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
         pop_GA = copy.deepcopy(pop)
         pop_CGA = copy.deepcopy(pop)
 
-        EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc)
+        EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc,benchmark)
         av = genarrayav.copy()
         mn = genarraymin.copy()
 
         genarrayav.clear()
         genarraymin.clear()
 
-        EA(rdm,gen_size,probabilitym,default_fitness,pop_GA,probabilityc)
+        EA(rdm,gen_size,probabilitym,default_fitness,pop_GA,probabilityc,benchmark)
 
         avGA = genarrayav.copy()
         mnGA = genarraymin.copy()
@@ -493,6 +502,7 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
         # show a legend on the plot
         plt.legend()
         plt.show()
+        '''
 
 
 
@@ -502,6 +512,6 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
 
 
 
-plotMapParameters(3.6,3.7,3.8,3.9,4.0,Rastrigin,1)
+plotMapParameters(3.6,3.7,3.8,3.9,4.0,Rastrigin)
 #plotMapParameters(3.8,3.9,4.0,Rosenbrock)
 #plotMapParameters(3.8,3.9,4.0,Griewank)

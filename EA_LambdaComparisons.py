@@ -171,14 +171,22 @@ def get_parent(pop):
         #print("{} is < than {}, so return {}".format(Bfit,Afit,Bfit))
         return parentB
 
-def crossover(p1,p2):
-    parentLen = len(p1)
-    crossPoint= random.randint(0,parentLen)
-    newKid1= p1[:crossPoint]
-    newKid2= p2[crossPoint:]
-    newKid = newKid1+newKid2
-    return newKid
+def crossover(p1,p2,probability):
+    #print("In Crossover Function... \n parent1 = {}\n parent2 ={}".format(p1,p2))
 
+    parentLen = len(p1)
+    num = random.uniform(0.0,1.0)
+    if num < probability:
+        crossPoint= random.randint(0,parentLen)
+        #print("crosspoint={}".format(crossPoint))
+        newKid1= p1[:crossPoint]
+        newKid2= p2[crossPoint:]
+        newKid = newKid1+newKid2
+        #print("The new Kid is {}".format(newKid))
+        return newKid
+    else:
+        #print("No crossover, so returning p1 = {}".format(p1))
+        return copy.deepcopy(p1)
 
 def mutate(individual,probability,algorithm_object):
 
@@ -208,14 +216,15 @@ for n trails of running the GA/CGA
 
 
 #map = lm
-probability = 0.05
+probabilitym = 0.05
+probabilityc = 0.8
 gen_size = 500
 default_fitness= math.inf
 num_trails=50
 population_size=50
 individual_size=20
 
-def EA(map,gen_size,probability,default_fitness,pop,bm):
+def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc,bm):
 
 
     #evaluate the fitness
@@ -232,15 +241,18 @@ def EA(map,gen_size,probability,default_fitness,pop,bm):
         # the best is the new pop -> may/may not do this | elitism
         new_population = [fittest]
 
+        #[g,g,g,g,g,g]
         #add to the new population:
         for i in range(len(pop)-1):
             #pick 2 parents
             p1 = get_parent(pop)
             p2 = get_parent(pop)
             #crossover
-            potential_child = crossover(p1,p2)
+            potential_child = crossover(p1,p2,probabilityc)
+            #potential_child = copy.deepcopy(p1)
             #mutation
-            child = mutate(potential_child,probability,map)
+            #print("\t\tpotential child is: {}".format(potential_child))
+            child = mutate(potential_child,probabilitym,map)
             new_population.append([child, default_fitness])
 
         #make the new-population the next pop to work with
@@ -262,7 +274,7 @@ def getMinFitness(xZero,lambda_val,l_min_fitness_array,benchmark):
     lm = LM(xZero, lambda_val,-0.5,2)
     rdm = Gauss(0,0.5)
     pop = generatePopulation(rdm, population_size, individual_size)
-    EA(lm,gen_size,probability,default_fitness,pop,benchmark)
+    EA(lm,gen_size,probabilitym,default_fitness,pop,benchmark,probabilityc)
     mn = genarraymin.copy()
     l_min_fitness_array.append(mn)
 

@@ -225,6 +225,8 @@ default_fitness= math.inf
 num_trails=20
 population_size=50
 individual_size=20
+lm = LM(0.02, 4.0,-0.5,2) #UPDATE FOR LAMBDA: Changing the .02 randomly each time. Then run the CGA vs GA.
+rdm = Gauss(0,0.5)
 
 def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc,bm):
 
@@ -425,6 +427,83 @@ def plotMapParameters(l1,l2,l3,l4,l5,benchmark,idx):
     # show a legend on the plot
     plt.legend()
     plt.show()
+
+    #CGA vs GA comparison
+    avgs2D_CGA=[]
+    mins2D_CGA=[]
+
+    avgs2D_GA=[]
+    mins2D_GA=[]
+    for i in range(num_trails):
+        genarrayav.clear()
+        genarraymin.clear()
+
+        pop = generatePopulation(rdm, population_size, individual_size)
+
+        pop_GA = copy.deepcopy(pop)
+        pop_CGA = copy.deepcopy(pop)
+
+        EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc,benchmark)
+        av = genarrayav.copy()
+        mn = genarraymin.copy()
+
+        genarrayav.clear()
+        genarraymin.clear()
+
+        EA(rdm,gen_size,probabilitym,default_fitness,pop_GA,probabilityc,benchmark)
+
+        avGA = genarrayav.copy()
+        mnGA = genarraymin.copy()
+
+        avgs2D_CGA.append(av)
+        mins2D_CGA.append(mn)
+
+        avgs2D_GA.append(avGA)
+        mins2D_GA.append(mnGA)
+
+        avgs2D_CGA = np.array(avgs2D_CGA)
+        mins2D_CGA = np.array(mins2D_CGA)
+        avgs2D_GA = np.array(avgs2D_GA)
+        mins2D_GA = np.array(mins2D_GA)
+
+        avg_avgs_CGA = np.mean(avgs2D_CGA,axis=0)
+        avg_mins_CGA = np.mean(mins2D_CGA,axis=0)
+        avg_avgs_GA = np.mean(avgs2D_GA,axis=0)
+        avg_mins_GA = np.mean(mins2D_GA,axis=0)
+
+        x = [i for i in range(gen_size+1)]
+        #REGULAR PLOTS AVG-AVG
+        plt.plot(x, avg_avgs_CGA,  label = "average-fitness of averages (CGA)")
+        plt.plot(x, avg_avgs_GA,  label = "average-fitness of averages (GA)")
+        # naming the x axis
+        plt.xlabel('generation')
+        # naming the y axis
+        plt.ylabel('fitness')
+        # giving a title to my graph
+        plt.title('Average of Average Fitness per Generation')
+
+        # show a legend on the plot
+        plt.legend()
+        plt.show()
+
+        #REGULAR PLOTS AVG-MINS
+        plt.plot(x, avg_mins_CGA,   label = "average-fitness of mins (CGA)")
+        plt.plot(x, avg_mins_GA,  label = "average-fitness of mins (GA)")
+
+        # naming the x axis
+        plt.xlabel('generation')
+        # naming the y axis
+        plt.ylabel('fitness')
+        # giving a title to my graph
+        plt.title('Average of Min Fitness per Generation')
+
+        # show a legend on the plot
+        plt.legend()
+        plt.show()
+
+
+
+
 
 
 

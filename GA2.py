@@ -28,7 +28,8 @@ def plotHistogram(map_array, name):
 
     maxfreq = n.max()
     # Set a clean upper y-axis limit.
-    plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
+    #plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
+    plt.ylim([0,450000])
     plt.show()
 
 # Logistic Class
@@ -242,7 +243,7 @@ rdm = Gauss(0,0.5)
 #map = lm
 probabilitym = 0.05
 probabilityc = 0.8
-gen_size = 10000
+gen_size = 500
 default_fitness= math.inf
 num_trails=50
 population_size=50
@@ -487,6 +488,8 @@ def plots():
 
 
     #REGULAR PLOTS AVG-AVG
+    '''
+
     plt.plot(x, avg_avgs_CGA,  label = "average-fitness of averages (CGA)")
     plt.plot(x, avg_avgs_GA,  label = "average-fitness of averages (GA)")
     # naming the x axis
@@ -514,7 +517,7 @@ def plots():
     # show a legend on the plot
     plt.legend()
     plt.show()
-
+    '''
 
     '''
     #SUBPLOTS FOR ANG-AVG EAs
@@ -542,7 +545,7 @@ def plots():
 
     plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
 
-    plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
+    #plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
 
     '''
     figs,axs = plt.subplots(2,1)
