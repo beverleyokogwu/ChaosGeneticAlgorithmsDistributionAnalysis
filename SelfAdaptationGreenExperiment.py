@@ -13,6 +13,7 @@ from numpy.random import randn
 genarrayav=[]
 genarraymin=[]
 mutd_values_CGA =[] #store the mutated values
+mutd_values_CGA2 =[] #store the mutated values of 2nd r param
 mutd_values_GA =[] #store the mutated values
 
 #Histogram plotting function
@@ -29,7 +30,7 @@ def plotHistogram(map_array, name):
     maxfreq = n.max()
     # Set a clean upper y-axis limit.
     #plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
-    plt.ylim([0,450000])
+    plt.ylim([0,5000])
     plt.show()
 
 # Logistic Class
@@ -203,8 +204,9 @@ def crossover(p1,p2,probability):
         return copy.deepcopy(p1)
 
 
-def mutate(individual,probability,algorithm_object,generation_num):
-
+def mutate(individual,probability,algorithm_object,generation_num,self_adapt_cutoff):
+    #print("IN MUTATE......")
+    #print("GENERATION NUMBER PASSED : {}".format(generation_num))
 
     #for each individual's genes, get a random number between 0 and 1
     for gene in range(len(individual)):
@@ -212,21 +214,20 @@ def mutate(individual,probability,algorithm_object,generation_num):
         if num < probability:
             n_val=algorithm_object.shift_scale_next()
 
-            if algorithm_object == lm:
-                #print("\nAdding {} to the CGA mutated array....".format(n_val))
+            if generation_num <= self_adapt_cutoff:
+                #print("The generation is {}, so we add {}, param: {} to mutd_values_CGA".format(generation_num,n_val, algorithm_object.r))
                 mutd_values_CGA.append(n_val)
-                #print("mutd_array_CGA now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values_CGA), mutd_values_CGA[0], mutd_values_CGA[-1]))
-            elif algorithm_object == rdm:
-                #print("\nAdding {} to the GA mutated array....".format(n_val))
-                mutd_values_GA.append(n_val)
-                #print("mutd_array_GA now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values_GA), mutd_values_GA[0], mutd_values_GA[-1]))
+            else:
+                #print("The generation is GREATER THAN 250: {}, so we add {} from LM parameter {} to mutd_values_CGA2".format(generation_num,n_val,algorithm_object.r))
+                mutd_values_CGA2.append(n_val)
+
             individual[gene]+=n_val
 
     return individual
 
 
 
-def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
+def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc,self_adapt_cutoff):
 
 
     #evaluate the fitness
@@ -241,25 +242,34 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
     # so far within constraints
     while fittest[1]>0 and gen <gen_size:
 
-        if gen > 250:
+        if gen > self_adapt_cutoff:
+            #print("The generation {} is greater than 2!!!............".format(gen))
 
-            map = LM(initial_x_0, 4.0,lm_shift, lm_scale)
+            #just change r
+            map.r = 4.0
 
         # the best is the new pop -> may/may not do this | elitism
+        #print("Getting the fittest individual to start a new population")
         new_population = [fittest]
 
         #[g,g,g,g,g,g]
         #add to the new population:
         for i in range(len(pop)-1):
             #pick 2 parents
+            #print("Let's pick two parents: \t")
             p1 = get_parent(pop)
             p2 = get_parent(pop)
+            #print(p1)
+            #print("\t")
+            #print(p2)
             #crossover
+            #print("Let's crossover")
             potential_child = crossover(p1,p2,probabilityc)
             #potential_child = copy.deepcopy(p1)
             #mutation
             #print("\t\tpotential child is: {}".format(potential_child))
-            child = mutate(potential_child,probabilitym,map,gen)
+            #print("Let's mutate")
+            child = mutate(potential_child,probabilitym,map,gen,self_adapt_cutoff)
             new_population.append([child, default_fitness])
 
         #make the new-population the next pop to work with
@@ -282,23 +292,45 @@ def self_adaptation_test_1():
 
     #Run first with one r value
     for i in range(num_trails):
+        #print("\nTRAIL NUMBER {}".format(i))
         pop = generatePopulation(rdm, population_size, individual_size)
         pop_CGA = copy.deepcopy(pop)
-        EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc)# Run the CGA
+        EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc,self_adapt_cutoff)# Run the CGA
+
+    #print("Our mutation values are: ")
+    CGA_mutd_values_first_r = mutd_values_CGA.copy()
+    CGA_mutd_values_second_r = mutd_values_CGA2.copy()
+    #print("CGA_mutd_values_first_r --> {}".format(CGA_mutd_values_first_r))
+    #print("\n\nCGA_mutd_values_second_r --> {}".format(CGA_mutd_values_second_r))
+    title1= 'Shift-Scale Distributions for CGA with r = 3.7'
+    title2= 'Shift-Scale Distributions for CGA with r = 4.0'
+
+    print("NOW PLOTTING HISTOGRAMS!!!!!!!!")
+    plotHistogram(CGA_mutd_values_first_r,title1)
+    plotHistogram(CGA_mutd_values_second_r,title2)
 
 
 
+def self_adaptation_test_2():
 
-    CGA_mutd_values = mutd_values_CGA.copy()
-    title = 'Shift-Scale Distributions for CGA with r = {}'.format(lm.r)
+    #Run first with one r value
 
-    plotHistogram(CGA_mutd_values,title)
+    #print("\nTRAIL NUMBER {}".format(i))
+    pop = generatePopulation(rdm, population_size, individual_size)
+    pop_CGA = copy.deepcopy(pop)
+    EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc,self_adapt_cutoff)# Run the CGA
 
-    #Change r and run again
-    mutd_values_CGA.clear()
+    #print("Our mutation values are: ")
+    CGA_mutd_values_first_r = mutd_values_CGA.copy()
+    CGA_mutd_values_second_r = mutd_values_CGA2.copy()
+    #print("CGA_mutd_values_first_r --> {}".format(CGA_mutd_values_first_r))
+    #print("\n\nCGA_mutd_values_second_r --> {}".format(CGA_mutd_values_second_r))
+    title1= 'Shift-Scale Distributions for CGA with r = 3.7'
+    title2= 'Shift-Scale Distributions for CGA with r = 4.0'
 
-
-
+    print("NOW PLOTTING HISTOGRAMS!!!!!!!!")
+    plotHistogram(CGA_mutd_values_first_r,title1)
+    plotHistogram(CGA_mutd_values_second_r,title2)
 
 
 
@@ -319,10 +351,11 @@ rdm = Gauss(rdm_shift,rdm_scale)
 probabilitym = 0.05
 probabilityc = 0.8
 gen_size = 500
+self_adapt_cutoff = 250
 default_fitness= math.inf
 num_trails=50
 population_size=50
 individual_size=20
 
 
-self_adaptation_test_1()
+self_adaptation_test_2()
