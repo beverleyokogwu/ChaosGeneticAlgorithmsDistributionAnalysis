@@ -418,6 +418,22 @@ def plots():
     plt.show()
 
 
+#Use variables & make code more flexible
+initial_x_0 = 0.02
+cm_parameter = 3.7
+lm_shift= -0.5
+lm_scale = 2
+rdm_shift = 0
+rdm_scale = 0.5
+lm = LM(initial_x_0, cm_parameter,lm_shift, lm_scale)
+rdm = Gauss(rdm_shift,rdm_scale)
+probabilitym = 0.05
+probabilityc = 0.8
+gen_size = 500
+default_fitness= math.inf
+num_trails=50
+population_size=50
+individual_size=20
 
 
 plots()
