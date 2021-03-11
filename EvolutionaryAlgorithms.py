@@ -279,15 +279,19 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 #Compute the average mutation gen_size
 def avg_mutation_size_computation():
     #Run the CGA
-
+    mut_size_total = 0.0
     for _ in range(num_trails):
 
         pop = generatePopulation(rdm, population_size, individual_size)
         EA(lm,gen_size,probabilitym,default_fitness,pop,probabilityc)
 
     mut_size = mutd_values_CGA.copy()
-    avg_mutation_size = mut_size/ len(mut_size)
+    for mutation in mut_size:
+        mut_size_total += mutation
+
+    avg_mutation_size = mut_size_total/ len(mut_size)
     print("BIAS for r = {} = {}".format(cm_parameter,avg_mutation_size))
+
 
 def plots():
     #mean and standard deviation plots
@@ -432,7 +436,7 @@ def plots():
 
 #Use variables & make code more flexible
 initial_x_0 = 0.02
-cm_parameter = 4.0
+cm_parameter = 3.6
 lm_shift= -0.5
 lm_scale = 2
 rdm_shift = 0
@@ -441,7 +445,7 @@ lm = LM(initial_x_0, cm_parameter,lm_shift, lm_scale)
 rdm = Gauss(rdm_shift,rdm_scale)
 probabilitym = 0.05
 probabilityc = 0.8
-gen_size = 500
+gen_size = 10000
 default_fitness= math.inf
 num_trails=50
 population_size=50
