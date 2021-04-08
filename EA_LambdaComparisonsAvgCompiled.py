@@ -220,7 +220,7 @@ for n trails of running the GA/CGA
 #map = lm
 probabilitym = 0.05
 probabilityc = 0.8
-gen_size = 500
+gen_size = 10000
 default_fitness= math.inf
 num_trails=10
 population_size=50
