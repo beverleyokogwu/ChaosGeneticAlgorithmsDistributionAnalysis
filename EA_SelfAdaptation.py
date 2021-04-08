@@ -14,7 +14,8 @@ genarrayav=[]
 genarraymin=[]
 mutd_values_CGA =[] #store the mutated values
 mutd_values_GA =[] #store the mutated values
-gen_r_values = [] #stores the average r values for each generation
+gen_r_values = [] #stores the  r values for each generation
+all_r_vals_avg = []
 
 
 # Logistic Class
@@ -129,7 +130,7 @@ def plotHistogram(map_array, name):
 
 def generatePopulation(obj, pop_size, indiv_size):
     population =[]
-    # [[[1,2,3,3.8],inf],[[3,4,5,4.0], inf]]
+    # [[[1,2,3,r],inf],[[3,4,5,r2], inf]]
 
     for i in range(pop_size):
         gene_values=[]
@@ -138,6 +139,7 @@ def generatePopulation(obj, pop_size, indiv_size):
             gene_values.append(obj.shift_scale_next())
         #add a random r value
         possible_r_value = random.uniform(3.6,4.0)
+
         gene_values.append(possible_r_value)
         population.append([gene_values,math.inf])
     return population
@@ -255,7 +257,19 @@ def mutate(individual,probability,algorithm_object):
         new_r = 3.57
 
     #add new r value to external list
-    gen_r_values.append(new_r)
+    # 1 r value per indiv
+    # 49 indivs per gen
+    # 500 gen
+    # need avg r for each gen
+    if len(gen_r_values) < 50:
+
+        #covers the 49 indivs per gen
+        gen_r_values.append(new_r)
+    if len(gen_r_values)==49:
+
+        avg_r_per_gen = sum(gen_r_values)/49
+        all_r_vals_avg.append(avg_r_per_gen) #add avg r per gen
+        gen_r_values.clear() # clear for the next gen
 
     individual[-1]=new_r
 
@@ -341,7 +355,7 @@ def r_analysis():
         pop = generatePopulation(rdm, population_size, individual_size)
         pop_CGA = copy.deepcopy(pop)
         EA(lm,gen_size,probabilitym,default_fitness,pop_CGA,probabilityc)
-        r_values = copy.deepcopy(gen_r_values)
+        r_values = copy.deepcopy(all_r_vals_avg)
         avg_r_all_trails.append(r_values)
 
     print("r_values length: {}".format(len(r_values)))
