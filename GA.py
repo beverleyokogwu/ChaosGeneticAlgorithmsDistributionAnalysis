@@ -199,17 +199,17 @@ lm = LM(0.01, 3.8,-0.5,2)
 rdm = Gauss(0,1)
 #map = lm
 probability = 0.01
-gen_size = 500
+gen_size = 10
 default_fitness= math.inf
-num_trails=50
-population_size=200
-individual_size=100
+num_trails=10
+population_size=15
+individual_size=15
 
 def EA(map,gen_size,probability,default_fitness):
 
 
     #generate the initial population
-    pop = generatePopulation(rdm, population_size, individual_size)
+    pop = generatePopulation(map, population_size, individual_size)
 
 
     #evaluate the fitness
@@ -445,13 +445,19 @@ def plots():
     #plot for averages
     x = [i for i in range(gen_size+1)]
     #x2 = [i for i in range(gen_size)]
-    """
-    plt.errorbar(x, avg_avgs_CGA, std_avgs_CGA, label = "average-fitness of averages (CGA)")
-    plt.errorbar(x, avg_mins_CGA, std_mins_CGA,  label = "average-fitness of mins (CGA)")
-    plt.errorbar(x, avg_avgs_GA, std_avgs_GA,  label = "average-fitness of averages (GA)")
-    plt.errorbar(x, avg_mins_GA, std_mins_GA,  label = "average-fitness of mins (GA)")
-    """
 
+    plt.plot(x, avg_avgs_CGA, label = "average-fitness of averages (CGA)")
+    #plt.plot(x, avg_mins_CGA, label = "average-fitness of mins (CGA)")
+    plt.plot(x, avg_avgs_GA, label = "average-fitness of averages (GA)")
+    #plt.plot(x, avg_mins_GA,label = "average-fitness of mins (GA)")
+    plt.xlabel('generation')
+    plt.ylabel('average-fitness')
+    plt.title('Average of Average Fitness per Generation')
+    plt.legend()
+    plt.show()
+
+
+    '''
     #SUBPLOTS FOR ANG-AVG EAs
     fig,ax = plt.subplots(2,1)
     ax[0].errorbar(x, avg_avgs_GA,yerr=std_avgs_CGA )
@@ -461,14 +467,14 @@ def plots():
     ax[1].set_title('Average of Average Fitness per Genaration (CGA)')
 
 
-    '''
+
     for ax in ax.flat:
         ax.set(xlabel='generation', ylabel='fitness')
         ax.label_outer()
-    '''
 
 
-    plt.show()
+
+    #plt.show()
 
     #SUBPLOTS FOR ANG-MIN EAs
     fig,ax = plt.subplots(2,1)
@@ -477,23 +483,23 @@ def plots():
 
     ax[1].errorbar(x, avg_mins_CGA,yerr=std_mins_GA,color='red')
     ax[1].set_title('Average of Min Fitness per Genaration (CGA)')
-    plt.show()
+    #plt.show()
 
-
+    '''
 
 
     #SUBPLOTS FOR DISTRIBUTIONS
 
-    plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
+    #plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
 
-    plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
+    #plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
 
     # HISTOGRAM SUBPLOTS
-    figs,axs = plt.subplots(2,1)
+    #figs,axs = plt.subplots(2,1)
 
-    axs[0]= plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
-    axs[1]= plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
-    plt.show()
+    #axs[0]= plotHistogram(CGA_mutd_values,'Shift-Scale Distributions for CGA')
+    #axs[1]= plotHistogram(GA_mutd_values,'Shift-Scale Distributions for GA')
+    #plt.show()
 
     '''
     n, bins, patches = axs[0,0].hist(x=CGA_mutd_values, bins=20, color='#0504aa',alpha=0.7, rwidth=0.85)
