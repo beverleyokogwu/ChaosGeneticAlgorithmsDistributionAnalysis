@@ -204,26 +204,43 @@ def crossover(p1,p2,probability):
         return copy.deepcopy(p1)
 
 
-def mutate(individual,probability,algorithm_object):
 
+
+
+
+
+
+#without Self Adaptation
+def mutate(individual,probability,algorithm_object):
 
     #for each individual's genes, get a random number between 0 and 1
     for gene in range(len(individual)):
         num = random.uniform(0.0,1.0)
+
         if num < probability:
             n_val=algorithm_object.shift_scale_next()
+            #CV  = r * x *(1.0-x)
 
             if algorithm_object == lm:
-                #print("\nAdding {} to the CGA mutated array....".format(n_val))
                 mutd_values_CGA.append(n_val)
-                #print("mutd_array_CGA now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values_CGA), mutd_values_CGA[0], mutd_values_CGA[-1]))
+
             elif algorithm_object == rdm:
-                #print("\nAdding {} to the GA mutated array....".format(n_val))
+
                 mutd_values_GA.append(n_val)
-                #print("mutd_array_GA now contains {} values with the first value ->{} and the last value-> {}".format(len(mutd_values_GA), mutd_values_GA[0], mutd_values_GA[-1]))
+
+            #mutation
             individual[gene]+=n_val
 
-    return individual
+    return individual #mutated individual
+
+
+
+
+
+
+
+
+
 
 # THE GA/CGA DRIVER
 
@@ -373,14 +390,14 @@ def plots():
     """
 
     #REGULAR PLOTS AVG-AVG
-    '''
+
 
     plt.plot(x, avg_avgs_CGA,  label = "average-fitness of averages (CGA)")
     plt.plot(x, avg_avgs_GA,  label = "average-fitness of averages (GA)")
     # naming the x axis
     plt.xlabel('generation')
     # naming the y axis
-    plt.ylabel('fitness')
+    plt.ylabel('average-fitness')
     # giving a title to my graph
     plt.title('Average of Average Fitness per Generation')
 
@@ -395,14 +412,14 @@ def plots():
     # naming the x axis
     plt.xlabel('generation')
     # naming the y axis
-    plt.ylabel('fitness')
+    plt.ylabel('min-fitness')
     # giving a title to my graph
     plt.title('Average of Min Fitness per Generation')
 
     # show a legend on the plot
     plt.legend()
     plt.show()
-    '''
+
 
     '''
     #SUBPLOTS FOR ANG-AVG EAs
@@ -436,25 +453,25 @@ def plots():
 
 #Use variables & make code more flexible
 initial_x_0 = 0.02
-cm_parameter = 3.6
+cm_parameter = 3.8
 lm_shift= -0.5
 lm_scale = 2
 rdm_shift = 0
 rdm_scale = 0.5
 lm = LM(initial_x_0, cm_parameter,lm_shift, lm_scale)
 rdm = Gauss(rdm_shift,rdm_scale)
-probabilitym = 0.05
-probabilityc = 0.8
-gen_size = 10000
+probabilitym = 0.01
+probabilityc = 1
+gen_size = 10
 default_fitness= math.inf
-num_trails=50
-population_size=50
-individual_size=20
+num_trails=10
+population_size=15
+individual_size=15
 
 
 
-#plots()
-avg_mutation_size_computation()
+plots()
+#avg_mutation_size_computation()
 
 
 
