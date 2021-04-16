@@ -17,6 +17,7 @@ mutd_values_GA =[] #store the mutated values
 gen_r_values = [] #stores the  r values for each generation
 all_r_vals_avg = []
 r_dist = []
+r_dist_0=[]
 
 
 # Logistic Class
@@ -225,6 +226,9 @@ def crossover(p1,p2,probability):
         #print("No crossover, so returning p1 = {}".format(p1))
         return copy.deepcopy(p1)
 
+
+
+
 # With Self-Adaptation
 def mutate(individual,probability,algorithm_object):
 
@@ -235,8 +239,10 @@ def mutate(individual,probability,algorithm_object):
             r_val = individual[-1] #get the r value for that gene
 
             if algorithm_object == lm:#CGA
+
                 algorithm_object.r = r_val
                 n_val=algorithm_object.shift_scale_next()
+                #CV  = r * x *(1.0-x)
                 mutd_values_CGA.append(n_val)
 
             elif algorithm_object == rdm:#GA
@@ -250,15 +256,18 @@ def mutate(individual,probability,algorithm_object):
     sigma_r=rdm.shift_scale_next() # adding the sigma to the r
 
     # make sure it's not out of range
-    new_r = individual[-1]+sigma_r
+    new_r = r_val+sigma_r
     if new_r > 4.0:
         new_r = 4.0
     elif new_r < 3.57:
         new_r = 3.57
 
+    r_dist.append(new_r)# this piece deals with the distributions of r values.
     individual[-1]=new_r
 
     return individual
+
+
 
 # THE GA/CGA DRIVER
 
@@ -269,6 +278,8 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
 
     #evaluate the fitness
     evaluate_fitness(pop)
+
+
 
     #get the fittest individual
     fittest = find_fittest(pop)
@@ -361,10 +372,12 @@ def r_analysis():
 #what do the distributions look like at any given point in time
 def r_hist(generation):
     for _ in range(num_trails):
-
-        pop = generatePopulation(rdm, population_size, individual_size)
-        pop_CGA = copy.deepcopy(pop)
-        EA(lm,generation,probabilitym,default_fitness,pop_CGA,probabilityc)
+        if generation == 0:
+            pop = generatePopulation(rdm, population_size, individual_size)
+        else:
+            pop = generatePopulation(rdm, population_size, individual_size)
+            pop_CGA = copy.deepcopy(pop)
+            EA(lm,generation,probabilitym,default_fitness,pop_CGA,probabilityc)
 
     plotHistogram(r_dist,'R Distributions for {} Generations'.format(generation))
 
@@ -529,31 +542,11 @@ individual_size=20
 
 
 
-'''
-    #add new r value to external list
-    # 1 r value per indiv
-    # 49 indivs per gen
-    # 500 gen
-    # need avg r for each gen
-    #print("LEN OF GEN_R_VALUES: {}".format(len(gen_r_values)))
-    if len(gen_r_values) < 50:
 
-        #covers the 49 indivs per gen
-        gen_r_values.append(new_r)
-
-    if len(gen_r_values)==49:
-
-        avg_r_per_gen = sum(gen_r_values)/49
-        all_r_vals_avg.append(avg_r_per_gen) #add avg r per gen
-        #print("all r array is {}".format(all_r_vals_avg))
-        gen_r_values.clear() # clear for the next gen
-
-    r_dist.append(new_r)# this piece deals with the distributions of r values.
-'''
 #r_analysis()
 #plots()
 #avg_mutation_size_computation()
-for i in range(0,200,100):
+for i in range(0,1):
     r_hist(i)
 
 
@@ -562,3 +555,23 @@ for i in range(0,200,100):
 
 
 #EA(lm,gen_size,probability,default_fitness)
+'''
+        #add new r value to external list
+        # 1 r value per indiv
+        # 49 indivs per gen
+        # 500 gen
+        # need avg r for each gen
+        #print("LEN OF GEN_R_VALUES: {}".format(len(gen_r_values)))
+        if len(gen_r_values) < 50:
+
+            #covers the 49 indivs per gen
+            gen_r_values.append(new_r)
+
+        if len(gen_r_values)==49:
+
+            avg_r_per_gen = sum(gen_r_values)/49
+            all_r_vals_avg.append(avg_r_per_gen) #add avg r per gen
+            #print("all r array is {}".format(all_r_vals_avg))
+            gen_r_values.clear() # clear for the next gen
+
+'''
