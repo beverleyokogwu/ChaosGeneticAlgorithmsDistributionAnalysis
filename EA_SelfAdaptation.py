@@ -143,6 +143,7 @@ def generatePopulation(obj, pop_size, indiv_size):
         possible_r_value = random.uniform(3.6,4.0)
 
         gene_values.append(possible_r_value)
+        r_dist_0.append(possible_r_value)
         population.append([gene_values,math.inf])
     return population
 
@@ -378,8 +379,10 @@ def r_hist(generation):
             pop = generatePopulation(rdm, population_size, individual_size)
             pop_CGA = copy.deepcopy(pop)
             EA(lm,generation,probabilitym,default_fitness,pop_CGA,probabilityc)
-
-    plotHistogram(r_dist,'R Distributions for {} Generations'.format(generation))
+    if generation == 0:
+        plotHistogram(r_dist_0,'R Distributions for Generation: {}'.format(generation))
+    else:
+        plotHistogram(r_dist,'R Distributions for {} Generations'.format(generation))
 
 def plots():
     #mean and standard deviation plots
@@ -536,7 +539,7 @@ probabilitym = 0.05
 probabilityc = 0.8
 gen_size = 500
 default_fitness= math.inf
-num_trails=50
+num_trails=1
 population_size=50
 individual_size=20
 
