@@ -1,3 +1,13 @@
+'''
+Early version of the EvolutionaryAlgorithms.py file
+
+Comments are deliberately not cut out to allow for users to explore
+different combinations.
+
+Author: Beverley-Claire Okogwu
+
+'''
+
 import math
 import random
 import matplotlib.pyplot as plt
