@@ -7,8 +7,12 @@
 '''
 Python Implementations of the Logistic, Tent, and Yang/Chen Chaotic Maps
 
-Each function uses an initial x_0 and an r value to generate a specified number 
+Each function uses an initial x_0 and an r value to generate a specified number
 of chaotic values.
+
+Note: This file was originally converted from an ipynb.
+
+Author: Beverley-Claire Okogwu
 
 '''
 #import statements
@@ -23,11 +27,11 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 class ChaoticMaps():
-    
+
     def __init__(self,r,x_n):
         self.r = r
         self.x_n = x_n
-        
+
     # Logistic Map
     def logisticMap(self):
         return self.r * self.x_n *(1.0-self.x_n)
@@ -52,7 +56,3 @@ def yangChen(self):
 
 
 # In[ ]:
-
-
-
-

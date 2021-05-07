@@ -114,7 +114,7 @@ def rastrigin(array):
     return (10*d)+sigma
 
 #Histogram plotting function
-def plotHistogram(map_array, name):
+def plotHistogram(map_array, name, ylimit):
 
 
     n, bins, patches = plt.hist(x=map_array, bins=20, color='#0504aa',
@@ -127,7 +127,8 @@ def plotHistogram(map_array, name):
     maxfreq = n.max()
     # Set a clean upper y-axis limit.
     #plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
-    plt.ylim([0,200])
+    plt.ylim([0,ylimit])
+    plt.xlim([3.5,4.0])
     plt.show()
 
 def generatePopulation(obj, pop_size, indiv_size):
@@ -231,7 +232,7 @@ def crossover(p1,p2,probability):
 
 
 # With Self-Adaptation
-def mutate(individual,probability,algorithm_object):
+def mutate(individual,probability,algorithm_object,start,stop,gen):
 
     #for each individual's genes, get a random number between 0 and 1
     for gene in range(len(individual)-1):#excluding the r
@@ -257,13 +258,16 @@ def mutate(individual,probability,algorithm_object):
     sigma_r=rdm.shift_scale_next() # adding the sigma to the r
 
     # make sure it's not out of range
-    new_r = r_val+sigma_r
+    new_r = individual[-1]+sigma_r
+
     if new_r > 4.0:
         new_r = 4.0
     elif new_r < 3.57:
         new_r = 3.57
 
-    r_dist.append(new_r)# this piece deals with the distributions of r values.
+    if gen >= start and gen <= stop:
+        r_dist.append(new_r)# this piece deals with the distributions of r values.
+
     individual[-1]=new_r
 
     return individual
@@ -274,7 +278,7 @@ def mutate(individual,probability,algorithm_object):
 
 #generate the initial population  [[[array of 100 LM values],inf], [,]...] //total = 200
 
-def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
+def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc,start):
 
 
     #evaluate the fitness
@@ -304,7 +308,7 @@ def EA(map,gen_size,probabilitym,default_fitness,pop,probabilityc):
             #potential_child = copy.deepcopy(p1)
             #mutation
             #print("\t\tpotential child is: {}".format(potential_child))
-            child = mutate(potential_child,probabilitym,map)
+            child = mutate(potential_child,probabilitym,map,start,gen_size,gen)
             new_population.append([child, default_fitness])
 
         #make the new-population the next pop to work with
@@ -380,9 +384,20 @@ def r_hist(generation):
             pop_CGA = copy.deepcopy(pop)
             EA(lm,generation,probabilitym,default_fitness,pop_CGA,probabilityc)
     if generation == 0:
-        plotHistogram(r_dist_0,'R Distributions for Generation: {}'.format(generation))
+        plotHistogram(r_dist_0,'R Distributions for Generation: {}'.format(generation),ylimit)
     else:
-        plotHistogram(r_dist,'R Distributions for {} Generations'.format(generation))
+        plotHistogram(r_dist,'R Distributions for {} Generations'.format(generation),ylimit)
+
+
+def r_intervals(start, stop):
+    for _ in range(num_trails):
+        pop = generatePopulation(rdm, population_size, individual_size)
+        pop_CGA = copy.deepcopy(pop)
+        EA(lm,stop,probabilitym,default_fitness,pop_CGA,probabilityc,start)
+        plotHistogram(r_dist,'R Distributions for the interval [{} , {}] Generations'.format(start, stop),ylimit)
+
+
+
 
 def plots():
     #mean and standard deviation plots
@@ -542,6 +557,7 @@ default_fitness= math.inf
 num_trails=1
 population_size=50
 individual_size=20
+ylimit = 1500
 
 
 
@@ -549,8 +565,9 @@ individual_size=20
 #r_analysis()
 #plots()
 #avg_mutation_size_computation()
-for i in range(0,1):
-    r_hist(i)
+for i in range(0,1000,100):
+    r_intervals(i,i+100)
+    r_dist.clear()
 
 
 

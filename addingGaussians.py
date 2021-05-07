@@ -1,5 +1,7 @@
 '''
 This file plots the fitness vs the generation for the CGA and the GA
+
+Author: Beverley-Claire Okogwu
 '''
 
 

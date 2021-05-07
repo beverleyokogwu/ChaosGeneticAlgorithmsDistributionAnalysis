@@ -11,6 +11,8 @@ ShiftScale function (See ShiftScale.py).
 
 Note: This file was originally converted from an ipynb.
 
+Author: Beverley-Claire Okogwu
+
 '''
 #import statements
 import numpy as np
