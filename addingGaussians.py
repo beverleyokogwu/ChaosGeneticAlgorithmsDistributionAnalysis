@@ -1,3 +1,8 @@
+'''
+This file plots the fitness vs the generation for the CGA and the GA
+'''
+
+
 import math
 import random
 import matplotlib.pyplot as plt
