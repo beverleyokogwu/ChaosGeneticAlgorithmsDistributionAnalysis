@@ -1,4 +1,11 @@
+'''
+Python Implementations of the Logistic Map and Gaussian classes from thesis
+Comments are deliberately not cut out to allow for users to explore
+different combinations.
 
+Author: Beverley-Claire Okogwu
+
+'''
 # Logistic Class
 # lm_shift= -0.5
 # lm_scale = 2
