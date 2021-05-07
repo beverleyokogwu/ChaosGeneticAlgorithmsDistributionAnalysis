@@ -1,3 +1,15 @@
+'''
+Python Implementations of the r vs x0 Experiment from thesis.
+This part of the experiment takes the AVERAGE of all the lines
+plotted from the EA_LambdaComparisons.py
+
+Comments are deliberately not cut out to allow for users to explore
+different combinations.
+
+Author: Beverley-Claire Okogwu
+
+'''
+
 #import statements
 import math
 import random
