@@ -1,3 +1,13 @@
+'''
+Python Implementations of the r vs x0 Experiment from thesis
+Comments are deliberately not cut out to allow for users to explore
+different combinations.
+
+Author: Beverley-Claire Okogwu
+
+'''
+
+
 #import statements
 import math
 import random
