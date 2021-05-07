@@ -1,4 +1,12 @@
+'''
+This file plots the Lyapunov exponent that shows where chaos occurs for the
+Logistic Map.
 
+Comments are deliberately not cut out to allow for users to explore
+different combinations.
+
+Author: Beverley-Claire Okogwu
+'''
 #import statements
 import numpy as np
 import matplotlib.pyplot as plt
