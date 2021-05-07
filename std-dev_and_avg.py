@@ -1,6 +1,8 @@
 '''
 This is a simple function/code that calculates the average and std. dev
 for n trails of running the GA/CGA
+
+Author: Beverley-Claire Okogwu
 '''
 #DRIVER
 def dev_and_avg(num_trails):
